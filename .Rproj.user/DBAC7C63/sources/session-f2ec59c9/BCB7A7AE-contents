@@ -1,0 +1,27 @@
+# Multiple Linear Regression {-}
+
+We have already introduced regression modelling where we modeled the relationship between an outcome variable $y$ and a single explanatory variable $x$. We only included one explanatory variable $x$, which was either a continuous or a categorical variable. Now, we shall examine fitting regression models with more than one explanatory variable. This is known as **multiple regression**.
+
+When fitting regression models with multiple explanatory variables, the interpretation of an explanatory variable is made in association with the other variables. For example,  if we wanted to model income then we may consider an individual's level of education, and perhaps the wealth of their parents. Then, when interpreting the effect an individuals level of education has on their income, we would also be considering the effect of the wealth of their parents simultaneously, as these two variables are likely to be related.
+
+Create a `.Rmd` file to load the following packages into R:
+
+```{r librariesMLR, echo = TRUE, eval = TRUE, warning = FALSE, message = FALSE}
+library(ggplot2)
+library(dplyr)
+library(moderndive)
+library(ISLR)
+library(skimr)
+library(plotly)
+library(tidyr)
+library(jtools)
+```
+
+***
+
+Additional information and examples can be found in [Chapter 6](https://moderndive.com/6-multiple-regression.html) of [Statistical Inference via Data Science](https://moderndive.com/index.html).
+
+<br>
+<br>
+
+

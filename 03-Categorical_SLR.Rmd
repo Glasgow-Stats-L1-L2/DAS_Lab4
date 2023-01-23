@@ -1,0 +1,298 @@
+# Simple linear regression with one categorical explanatory variable {-}
+
+Here, we will fit a simple linear regression model were the explanatory variable is categorical. A **categorical variable** is a variable of a fixed number of possible values, assigning units to particular groups (or categories) based on qualitative properties.
+
+We shall examine the `gapminder` data set from the `gapminder` library. This is a data set on life expectancy across various countries around the world. We will explore life expectancy and its potential differences:
+
+  * Between continents: Does life expectancy vary, on average, between the five continents of the world?; and
+  * Within continents: Does life expectancy vary, on average, within the five continents of the world?
+
+Thus, we will be looking at:
+
+  * life expectancy as our numerical outcome variable $y$; and
+  * the continent a country is within as our categorical variable $x$.
+
+## Exploratory data analysis {-}
+
+Let's examine a subset of the `gapminder` data set relating to the year 2007. That is, we use the `filter` function to choose only the observations pertaining to 2007, and then `select` the variables we are interested in:
+
+```{r gap, echo = TRUE, eval = TRUE, warning = FALSE}
+gapminder2007 <- gapminder %>%
+  filter(year == 2007) %>% 
+  select(country, continent, lifeExp)
+```
+
+The new data set can be examined using either the `View` or `glimpse` functions, i.e.\
+
+```{r gap2, echo = TRUE, eval = TRUE, warning = FALSE}
+glimpse(gapminder2007)
+```
+
+Here, we can see that both `country` and `continent` are factors (`fct`), which is how R stores categorical variables. Similarly to our previous exploratory data analysis, we can obtain summary statistics using the `skim` function. First, let's take a look at the life expectancy (`lifeExp`) and `continent` variables:
+
+```{r gap3, echo = TRUE, eval = TRUE, warning = FALSE}
+gapminder2007 %>% 
+  select(continent, lifeExp) %>% 
+  skim()
+```
+
+The summary output for the numerical outcome variable `lifeExp` is the same as we have seen previously. However, for the categorical variable `continent` we obtain:
+
+  * `n_unique`: the number of levels (or categories) of the variable, i.e.\ the number of continents.
+  * `top_counts`: the top counts from the top categories.
+  * `ordered`: whether the variable is *ordinal* or not. That is, whether or not the ordering of the categories matter.
+  
+```{r MCQ14}
+opts_Q14 <- sample(c("30",
+                     answer = "33",
+                     "25",
+                     "52"))
+```
+
+<br>
+
+**From the `gapminder` data set, how many countries comprise Asia?**
+`r longmcq(opts_Q14)`
+
+<br>
+
+```{r MCQ15}
+opts_Q15 <- sample(c("Oceania",
+                     answer = "Europe",
+                     "Asia",
+                     "Africa",
+                     "Americas"))
+```
+
+**Which continent has the third lowest number of countries in the `gapminder` data set?**
+`r longmcq(opts_Q15)`
+
+<br>
+
+```{r MCQ16}
+opts_Q16 <- c("Yes",
+              answer = "No")
+```
+
+**Is the `continent` variable ordinal?**
+`r longmcq(opts_Q16)`
+
+<br>
+
+We can summarise any differences in life expectancy by continent by taking a look at the median and mean life expectancies of each continent using the `group_by` and `summarize` functions as follows:
+
+```{r gap4, echo = c(1), eval = TRUE, warning = FALSE}
+lifeExp.continent <- gapminder2007 %>%
+  group_by(continent) %>%
+  summarize(median = median(lifeExp), mean = mean(lifeExp))
+lifeExp.continent
+```
+
+```{r MCQ17}
+opts_Q17 <- sample(c("Oceania",
+                     "Europe",
+                     "Asia",
+                     answer = "Africa",
+                     "Americas"))
+```
+
+<br>
+
+**Which continent has the lowest life expectancy?**
+`r longmcq(opts_Q17)`
+
+<br>
+
+**Task**: Obtain the worldwide median and mean life expectancies from the `gapminder2007` data set.
+
+`r hide("Hint")`
+Use the `median` and `mean` functions within the `summarize` function.
+`r unhide()`
+
+```{r Task5-solution, webex.hide="Solution", echo=TRUE, eval=TRUE}
+gapminder2007 %>%
+  summarize(median = median(lifeExp), mean = mean(lifeExp))
+```
+
+<br>
+
+```{r MCQ18}
+opts_Q18 <- c("Lower",
+              answer = "Higher")
+```
+
+<br>
+
+**Is the average life expectancy of Europe higher or lower than the worldwide average?**
+`r longmcq(opts_Q18)`
+
+<br>
+
+Boxplots are often used when examining the distribution of a numerical outcome variable across different levels of a categorical variable:
+
+```{r gap6, echo = TRUE, eval = TRUE, warning = FALSE, out.width = '90%', fig.align = "center", fig.cap = "Life expectancy by continent in 2007."}
+ggplot(gapminder2007, aes(x = continent, y = lifeExp)) +
+  geom_boxplot() +
+  labs(x = "Continent", y = "Life expectancy (years)", 
+       title = "Life expectancy by continent")
+```
+
+Here, we can see that the middle 50% of the life expectancy distribution of Africa is much smaller than, and does not overlap with, the middle 50% of the remaining four continents, while the country with the highest life expectancy in Africa is less than all countries in Oceania. Speaking of Oceania, there is almost no variability (or spread) in life expectancy in this continent, however that may well be because it consists of only two countries (Australia and New Zealand). There is more variability in life expectancy in the continents of Africa and Asia.
+
+```{r MCQ19}
+opts_Q19 <- sample(c("Bahrain",
+                     answer = "Afghanistan",
+                     "China",
+                     "Iran",
+                     "Cambodia",
+                     "Other"))
+```
+
+<br>
+
+**What country in Asia has a much lower life expectancy than the rest of the continent?**
+`r longmcq(opts_Q19)`
+
+`r hide("Hint")`
+Start by subsetting the `gapminder2007` data set for only the `continent` of Asia using the `filter` function. The `group_by` and `summarize` functions can then be used to obtain a table of the `median` and `mean` life expectancies of all countries in Asia.
+`r unhide()`
+
+<br>
+
+## Formal analysis {-}
+
+When examining the relationship between a numerical outcome variable $y$ and a categorical explanatory variable $x$, we are not just looking to find the best-fitting line to the data as before, but are examining relative differences to a baseline category.  For example, the table below displays the mean life expectancy of each continent, as well as the differences between the means of each continent and Africa. Now, in comparison with Africa we can see that the mean life expectancy of the other continents is around 18-26 years greater than that of Africa.
+
+```{r gap7, echo = FALSE, eval = TRUE, warning = FALSE}
+lifeExp.by.continent <- gapminder2007 %>%
+  group_by(continent) %>%
+  summarize(median = median(lifeExp), mean = mean(lifeExp))
+
+mean.africa <- lifeExp.by.continent %>%
+  filter(continent == "Africa") %>%
+  pull(mean)
+```
+```{r gap8, echo = FALSE, eval = TRUE, warning = FALSE}
+gapminder2007 %>%
+  group_by(continent) %>%
+  summarize(mean = mean(lifeExp)) %>%
+  mutate(`mean vs Africa` = mean - mean.africa) %>% 
+  knitr::kable(
+    digits = 2,
+    booktabs = TRUE
+  )
+```
+
+Now let us fit our regression model to the data, where `lifeExp` is our outcome variable $y$ and `continent` is our categorical explanatory variable $x$:
+
+```{r gap9, echo = TRUE, eval = TRUE, warning = FALSE}
+lifeExp.model <- lm(lifeExp ~ continent, data = gapminder2007)
+```
+```{r gap10, echo = FALSE, eval = TRUE, warning = FALSE}
+get_regression_table(lifeExp.model)
+```
+
+**Note**: For now we will ignore the last five columns of the regression table and only focus on the estimate column.
+
+We obtain five estimates: the `intercept` term and four others relating to the continents (`continentAmericas`, `continentAsia`, `continentEurope` and `continentOceania`), such that our regression equation is given as:
+
+$$\widehat{\mbox{life exp}} = \widehat{\alpha} + \widehat{\beta}_{\mbox{Amer}} \cdot \mathbb{I}_{\mbox{Amer}}(x) + \widehat{\beta}_{\mbox{Asia}} \cdot \mathbb{I}_{\mbox{Asia}}(x) + \widehat{\beta}_{\mbox{Euro}} \cdot \mathbb{I}_{\mbox{Euro}}(x) + \widehat{\beta}_{\mbox{Ocean}} \cdot \mathbb{I}_{\mbox{Ocean}}(x),$$
+where
+
+  * the intercept $\widehat{\alpha}$ is the mean life expectancy for our baseline category Africa;
+  * $\widehat{\beta}_{\mbox{continent}}$ is the difference in the mean life expectancy of a given continent relative to the baseline category Africa; and
+  * $\mathbb{I}_{\mbox{continent}}(x)$ is an indicator function such that
+  
+    $$\mathbb{I}_{\mbox{continent}}(x)=\left\{
+                \begin{array}{ll}
+                  1 ~~~ \mbox{if country} ~ x ~ \mbox{is in the continent},\\
+                  0 ~~~ \mbox{Otherwise}.\\
+                \end{array}
+              \right.$$
+
+Essentially, the estimates for each continent are known as *offsets* relative to the baseline category (Africa in this case). For example, the mean life expectancy for Africa is simply equal to the intercept term $\widehat{\alpha} = 54.8$. However, the mean life expectancy for Asia is $\widehat{\alpha} + \widehat{\beta}_{\mbox{Asia}} \cdot \mathbb{I}_{\mbox{Asia}}(x) = 54.8 + 15.9 \cdot 1 = 70.7$.
+
+```{r MCQ20}
+opts_Q20 <- sample(c("77.6",
+                     answer = "73.6",
+                     "80.7"))
+```
+
+<br>
+
+**From the regression model, what is the mean life expectancy of the Americas?**
+`r longmcq(opts_Q20)`
+
+<br>
+
+## Assessing model fit {-}
+
+What do the fitted values $\widehat{y}$ and the residuals $y - \widehat{y}$ correspond to when we are dealing with a categorical explanatory variable? Let's explore the `gapminder2007` data set in order to understand how they work.
+
+```{r gap12, echo = FALSE, eval = TRUE, warning = FALSE}
+gapminder2007
+```
+
+Here, we see the life expectancy of each country and the continent they are from. For example, let's remember the life expectancies of Afghanistan (43.8) and Bahrain (75.6). Now, we can obtain the fitted values and residuals in the same way we did previously:
+
+```{r gap13, echo = c(1), eval = TRUE, warning = FALSE}
+regression_points <- get_regression_points(lifeExp.model)
+regression_points
+```
+
+The first row of the regression table corresponds to the observed life expectancy (`lifeExp`), fitted value (`lifeExp_hat`) and the residual error (`residual`) for Afghanistan. Here, we see that the fitted value (`lifeExp_hat = 70.7`) is much greater than the life expectancy of Afghanistan (`lifeExp = 43.8`) with a `residual = -26.9`. Now, for Bahrain (`ID = 8`) we also have the same fitted value (`lifeExp_hat = 70.7`). This is because the fitted values for each `country` correspond to the mean life expectancy for that `continent`. Hence, all countries in Africa have the fitted value`lifeExp_hat = 54.8`, while all countries in Europe have the fitted value `lifeExp_hat = 77.6`. The `residual` error in this case is then how much a country deviates from the mean life expectancy of its respective continent.
+
+```{r MCQ21}
+opts_Q21 <- sample(c("Saudi Arabia",
+                    answer = "Reunion",
+                    "Belgium",
+                    "Other",
+                    "Argentina"))
+```
+
+<br>
+
+**Which country has the largest positive `residual` error?**
+`r longmcq(opts_Q21)`
+
+`r hide("Hint")`
+This can be found by looking through the regression table above. You could also try using the `which.max` function on the `residual` column.
+`r unhide()`
+
+<br>
+
+For assessing the assumptions surrounding the residuals for a categorical explanatory variable, we can plot the residuals for each continent:
+
+```{r gap14, echo = TRUE, eval = TRUE, warning = FALSE, out.width = '90%', fig.align = "center", fig.cap = "Residuals over continent."}
+ggplot(regression_points, aes(x = continent, y = residual)) +
+  geom_jitter(width = 0.1) + 
+  labs(x = "Continent", y = "Residual") +
+  geom_hline(yintercept = 0, col = "blue")
+```
+
+**Note**: we have jittered the points for each continent in order to see the residuals for each country more clearly.
+
+Here, we see that there is an even spread of the residuals above and below the zero line for each continent, and hence our assumption that the residuals have mean zero appears valid. There is an outlier observed for Asia with a large negative residual (relating to Afghanistan).
+
+To check that the residual errors are normally distributed, we plot a histogram of them:
+
+```{r gap15, echo = TRUE, eval = TRUE, warning = FALSE, out.width = '90%', fig.align = "center", fig.cap = "Histogram of residuals."}
+ggplot(regression_points, aes(x = residual)) +
+  geom_histogram(binwidth = 5, color = "white") +
+  labs(x = "Residual")
+```
+
+```{r MCQ22}
+opts_Q22 <- c(answer = "Yes",
+              "No")
+```
+
+<br>
+
+**Are the residuals normally distributed with mean zero?**
+`r longmcq(opts_Q22)`
+
+<br>
+<br>
+
+

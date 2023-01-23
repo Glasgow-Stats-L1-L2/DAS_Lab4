@@ -1,0 +1,40 @@
+# Further Tasks: Multiple Linear Regression {-}
+
+You are encouraged to complete the following tasks by using RMarkdown to produce a single document which summarises all your work, i.e. the original questions, your R code, your comments and reflections, etc.
+
+<br>
+
+**Task** Assess the model assumptions for the parallel regression lines model. Do they appear valid?
+
+`r hide("Hint")`
+Assess the model assumptions in the same way we did for the interaction model.
+`r unhide()`
+
+<br>
+
+**Task** Return to the `Credit` data set and fit a multiple regression model with `Balance` as the outcome variable, and `Income` and `Age` as the explanatory variables, respectively. Assess the assumptions of the multiple regression model.
+
+`r hide("Hint")`
+Start by using the `select` function to subset the `Credit` data set so you only have the variables `Balance`, `Income` and `Age`. Remember to check the relationship between `Balance` and `Age` using a scatterplot before moving on to the modelling process.
+`r unhide()`
+
+<br>
+
+**Task** Return to the `Credit` data set and fit a parallel regression lines model with `Balance` as the outcome variable, and `Income` and `Student` as the explanatory variables, respectively. Assess the assumptions of the fitted model.
+
+<br>
+
+**Task** Load the library `datasets` and look at the `iris` data set of Edgar Anderson containing measurements (in centimetres) on 150 different flowers across three different species of iris. Fit an interaction model with `Sepal.Width` as the outcome variable, and `Sepal.Length` and `Species` as the explanatory variables. Assess the assumptions of the fitted model.
+
+`r hide("Hint")`
+Start by using the `select` function to subset the `iris` data set so you only have the variables `Sepal.Width`, `Sepal.Length` and `Species`. Remember to first check the relationship between the variables using summary statistics and scatterplots before moving on to the modelling process.
+`r unhide()`
+
+<br>
+<br>
+
+
+
+
+
+

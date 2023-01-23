@@ -1,0 +1,984 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Simple linear regression with one numerical explanatory variable | Data Analysis: Regression Modelling</title>
+  <meta name="description" content="Simple linear regression with one numerical explanatory variable | Data Analysis: Regression Modelling" />
+  <meta name="generator" content="bookdown 0.28 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Simple linear regression with one numerical explanatory variable | Data Analysis: Regression Modelling" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Simple linear regression with one numerical explanatory variable | Data Analysis: Regression Modelling" />
+  
+  
+  
+
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="simple-linear-regression.html"/>
+<link rel="next" href="simple-linear-regression-with-one-categorical-explanatory-variable.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<script src="libs/htmlwidgets-1.5.4/htmlwidgets.js"></script>
+<script src="libs/plotly-binding-4.10.0/plotly.js"></script>
+<script src="libs/typedarray-0.1/typedarray.min.js"></script>
+<link href="libs/crosstalk-1.2.0/css/crosstalk.min.css" rel="stylesheet" />
+<script src="libs/crosstalk-1.2.0/js/crosstalk.min.js"></script>
+<link href="libs/plotly-htmlwidgets-css-2.5.1/plotly-htmlwidgets.css" rel="stylesheet" />
+<script src="libs/plotly-main-2.5.1/plotly-latest.min.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+<link rel="stylesheet" href="include/webex.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Introduction</a></li>
+<li class="chapter" data-level="" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html"><i class="fa fa-check"></i>Simple linear regression</a></li>
+<li class="chapter" data-level="" data-path="simple-linear-regression-with-one-numerical-explanatory-variable.html"><a href="simple-linear-regression-with-one-numerical-explanatory-variable.html"><i class="fa fa-check"></i>Simple linear regression with one numerical explanatory variable</a>
+<ul>
+<li class="chapter" data-level="" data-path="simple-linear-regression-with-one-numerical-explanatory-variable.html"><a href="simple-linear-regression-with-one-numerical-explanatory-variable.html#exploratory-data-analysis"><i class="fa fa-check"></i>Exploratory data analysis</a></li>
+<li class="chapter" data-level="" data-path="simple-linear-regression-with-one-numerical-explanatory-variable.html"><a href="simple-linear-regression-with-one-numerical-explanatory-variable.html#correlation"><i class="fa fa-check"></i>Correlation</a></li>
+<li class="chapter" data-level="" data-path="simple-linear-regression-with-one-numerical-explanatory-variable.html"><a href="simple-linear-regression-with-one-numerical-explanatory-variable.html#formal-analysis"><i class="fa fa-check"></i>Formal analysis</a></li>
+<li class="chapter" data-level="" data-path="simple-linear-regression-with-one-numerical-explanatory-variable.html"><a href="simple-linear-regression-with-one-numerical-explanatory-variable.html#assessing-model-fit"><i class="fa fa-check"></i>Assessing model fit</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="simple-linear-regression-with-one-categorical-explanatory-variable.html"><a href="simple-linear-regression-with-one-categorical-explanatory-variable.html"><i class="fa fa-check"></i>Simple linear regression with one categorical explanatory variable</a>
+<ul>
+<li class="chapter" data-level="" data-path="simple-linear-regression-with-one-categorical-explanatory-variable.html"><a href="simple-linear-regression-with-one-categorical-explanatory-variable.html#exploratory-data-analysis-1"><i class="fa fa-check"></i>Exploratory data analysis</a></li>
+<li class="chapter" data-level="" data-path="simple-linear-regression-with-one-categorical-explanatory-variable.html"><a href="simple-linear-regression-with-one-categorical-explanatory-variable.html#formal-analysis-1"><i class="fa fa-check"></i>Formal analysis</a></li>
+<li class="chapter" data-level="" data-path="simple-linear-regression-with-one-categorical-explanatory-variable.html"><a href="simple-linear-regression-with-one-categorical-explanatory-variable.html#assessing-model-fit-1"><i class="fa fa-check"></i>Assessing model fit</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="further-tasks-simple-linear-regression.html"><a href="further-tasks-simple-linear-regression.html"><i class="fa fa-check"></i>Further Tasks: Simple Linear Regression</a></li>
+<li class="chapter" data-level="" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html"><i class="fa fa-check"></i>Multiple Linear Regression</a></li>
+<li class="chapter" data-level="" data-path="regression-modelling-with-two-continuous-explanatory-variables.html"><a href="regression-modelling-with-two-continuous-explanatory-variables.html"><i class="fa fa-check"></i>Regression modelling with two continuous explanatory variables</a>
+<ul>
+<li class="chapter" data-level="" data-path="regression-modelling-with-two-continuous-explanatory-variables.html"><a href="regression-modelling-with-two-continuous-explanatory-variables.html#exploratory-data-analysis-2"><i class="fa fa-check"></i>Exploratory data analysis</a></li>
+<li class="chapter" data-level="" data-path="regression-modelling-with-two-continuous-explanatory-variables.html"><a href="regression-modelling-with-two-continuous-explanatory-variables.html#formal-analysis-2"><i class="fa fa-check"></i>Formal analysis</a></li>
+<li class="chapter" data-level="" data-path="regression-modelling-with-two-continuous-explanatory-variables.html"><a href="regression-modelling-with-two-continuous-explanatory-variables.html#assessing-model-fit-2"><i class="fa fa-check"></i>Assessing model fit</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="regression-modelling-with-one-continuous-and-one-categorical-explanatory-variable.html"><a href="regression-modelling-with-one-continuous-and-one-categorical-explanatory-variable.html"><i class="fa fa-check"></i>Regression modelling with one continuous and one categorical explanatory variable</a>
+<ul>
+<li class="chapter" data-level="" data-path="regression-modelling-with-one-continuous-and-one-categorical-explanatory-variable.html"><a href="regression-modelling-with-one-continuous-and-one-categorical-explanatory-variable.html#exploratory-data-analysis-3"><i class="fa fa-check"></i>Exploratory data analysis</a></li>
+<li class="chapter" data-level="" data-path="regression-modelling-with-one-continuous-and-one-categorical-explanatory-variable.html"><a href="regression-modelling-with-one-continuous-and-one-categorical-explanatory-variable.html#multiple-regression-parallel-slopes-model"><i class="fa fa-check"></i>Multiple regression: parallel slopes model</a></li>
+<li class="chapter" data-level="" data-path="regression-modelling-with-one-continuous-and-one-categorical-explanatory-variable.html"><a href="regression-modelling-with-one-continuous-and-one-categorical-explanatory-variable.html#multiple-regression-interaction-model"><i class="fa fa-check"></i>Multiple regression: interaction model</a></li>
+<li class="chapter" data-level="" data-path="regression-modelling-with-one-continuous-and-one-categorical-explanatory-variable.html"><a href="regression-modelling-with-one-continuous-and-one-categorical-explanatory-variable.html#assessing-model-fit-3"><i class="fa fa-check"></i>Assessing model fit</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="further-tasks-multiple-linear-regression.html"><a href="further-tasks-multiple-linear-regression.html"><i class="fa fa-check"></i>Further Tasks: Multiple Linear Regression</a></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Data Analysis: Regression Modelling</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="simple-linear-regression-with-one-numerical-explanatory-variable" class="section level1 unnumbered hasAnchor">
+<h1>Simple linear regression with one numerical explanatory variable<a href="simple-linear-regression-with-one-numerical-explanatory-variable.html#simple-linear-regression-with-one-numerical-explanatory-variable" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p>Create a <code>.Rmd</code> file to load the following packages into R:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="simple-linear-regression-with-one-numerical-explanatory-variable.html#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb1-2"><a href="simple-linear-regression-with-one-numerical-explanatory-variable.html#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb1-3"><a href="simple-linear-regression-with-one-numerical-explanatory-variable.html#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(moderndive)</span>
+<span id="cb1-4"><a href="simple-linear-regression-with-one-numerical-explanatory-variable.html#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gapminder)</span>
+<span id="cb1-5"><a href="simple-linear-regression-with-one-numerical-explanatory-variable.html#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(skimr)</span></code></pre></div>
+<p>Student feedback in higher education is extremely important when it comes to the evaluation of teaching techniques, materials, and improvements in teaching methods and technologies. However, there have been studies into potential bias factors when feedback is provided, such as the physical appearance of the teacher; see <a href="https://www.journals.elsevier.com/economics-of-education-review/">Economics of Education Review</a> for details. Here, we shall look at a study from student evaluations of <span class="math inline">\(n=463\)</span> professors from The University of Texas at Austin. In particular, we will examine the evaluation scores of the instructors based purely on one numerical variable: their <em>beauty score</em>. Therefore, our simple linear regression model will consist of:</p>
+<ul>
+<li>the numerical outcome variable <em>teaching score</em> (<span class="math inline">\(y\)</span>); and</li>
+<li>the numerical explanatory variable <em>beauty score</em> (<span class="math inline">\(x\)</span>).</li>
+</ul>
+<div id="exploratory-data-analysis" class="section level2 unnumbered hasAnchor">
+<h2>Exploratory data analysis<a href="simple-linear-regression-with-one-numerical-explanatory-variable.html#exploratory-data-analysis" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Before you ever do any statistical modelling of data, you should always perform an <strong>exploratory data analysis</strong> of the data. Performing an exploratory data analysis can give us an idea of the distribution of the data, and whether it contains any strange values, such as <strong>outliers</strong> or <strong>missing values</strong>. However, more importantly, it is used to inform which statistical model we should fit to the data. An exploratory data analysis may involve:</p>
+<ol style="list-style-type: decimal">
+<li>Looking at the raw values of the data, either by looking at the spreadsheet directly, or using R.</li>
+<li>By computing various summary statistics, such as the <em>five-number summary</em>, means, and standard deviations.</li>
+<li>Plotting the data using various data visualisation techniques.</li>
+</ol>
+<p>Let's examine the data <code>evals</code>. We can look at the raw values from <code>evals</code> using the RStudio pop-up spreadsheet viewer using:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="simple-linear-regression-with-one-numerical-explanatory-variable.html#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">View</span>(evals)</span></code></pre></div>
+<p><br></p>
+<p><strong>Task</strong>: Use other functions you have learned to have a peek at the <code>evals</code> data set.</p>
+<div class="webex-solution">
+<button>
+Hint
+</button>
+<p>You may want to use the <code>glimpse</code> and <code>head</code> functions.</p>
+</div>
+<div class="webex-solution">
+<button>
+Solution
+</button>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="simple-linear-regression-with-one-numerical-explanatory-variable.html#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(evals)</span></code></pre></div>
+<pre><code># A tibble: 6 x 14
+     ID prof_ID score   age bty_avg gender ethni~1 langu~2 rank  pic_o~3 pic_c~4
+  &lt;int&gt;   &lt;int&gt; &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt; &lt;fct&gt;  &lt;fct&gt;   &lt;fct&gt;   &lt;fct&gt; &lt;fct&gt;   &lt;fct&gt;  
+1     1       1   4.7    36       5 female minori~ english tenu~ not fo~ color  
+2     2       1   4.1    36       5 female minori~ english tenu~ not fo~ color  
+3     3       1   3.9    36       5 female minori~ english tenu~ not fo~ color  
+4     4       1   4.8    36       5 female minori~ english tenu~ not fo~ color  
+5     5       2   4.6    59       3 male   not mi~ english tenu~ not fo~ color  
+6     6       2   4.3    59       3 male   not mi~ english tenu~ not fo~ color  
+# ... with 3 more variables: cls_did_eval &lt;int&gt;, cls_students &lt;int&gt;,
+#   cls_level &lt;fct&gt;, and abbreviated variable names 1: ethnicity, 2: language,
+#   3: pic_outfit, 4: pic_color
+# i Use `colnames()` to see all variable names</code></pre>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="simple-linear-regression-with-one-numerical-explanatory-variable.html#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(evals)</span></code></pre></div>
+<pre><code>Rows: 463
+Columns: 14
+$ ID           &lt;int&gt; 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17~
+$ prof_ID      &lt;int&gt; 1, 1, 1, 1, 2, 2, 2, 3, 3, 4, 4, 4, 4, 4, 4, 4, 4, 5, 5, ~
+$ score        &lt;dbl&gt; 4.7, 4.1, 3.9, 4.8, 4.6, 4.3, 2.8, 4.1, 3.4, 4.5, 3.8, 4.~
+$ age          &lt;int&gt; 36, 36, 36, 36, 59, 59, 59, 51, 51, 40, 40, 40, 40, 40, 4~
+$ bty_avg      &lt;dbl&gt; 5.000, 5.000, 5.000, 5.000, 3.000, 3.000, 3.000, 3.333, 3~
+$ gender       &lt;fct&gt; female, female, female, female, male, male, male, male, m~
+$ ethnicity    &lt;fct&gt; minority, minority, minority, minority, not minority, not~
+$ language     &lt;fct&gt; english, english, english, english, english, english, eng~
+$ rank         &lt;fct&gt; tenure track, tenure track, tenure track, tenure track, t~
+$ pic_outfit   &lt;fct&gt; not formal, not formal, not formal, not formal, not forma~
+$ pic_color    &lt;fct&gt; color, color, color, color, color, color, color, color, c~
+$ cls_did_eval &lt;int&gt; 24, 86, 76, 77, 17, 35, 39, 55, 111, 40, 24, 24, 17, 14, ~
+$ cls_students &lt;int&gt; 43, 125, 125, 123, 20, 40, 44, 55, 195, 46, 27, 25, 20, 2~
+$ cls_level    &lt;fct&gt; upper, upper, upper, upper, upper, upper, upper, upper, u~</code></pre>
+</div>
+<p><br></p>
+<strong>How many observations are in the <code>evals</code> data set?</strong>
+<div id="radio_IJZQIOXWRN" class="webex-radiogroup">
+<label><input type="radio" autocomplete="off" name="radio_IJZQIOXWRN" value=""></input> <span>18</span></label><label><input type="radio" autocomplete="off" name="radio_IJZQIOXWRN" value=""></input> <span>13</span></label><label><input type="radio" autocomplete="off" name="radio_IJZQIOXWRN" value="answer"></input> <span>463</span></label><label><input type="radio" autocomplete="off" name="radio_IJZQIOXWRN" value=""></input> <span>512</span></label>
+</div>
+<p><br></p>
+<p>At the moment we are only really interested in the instructors teaching (<code>score</code>) and beauty (<code>bty_avg</code>) scores, and so we can look at a subset of the data as follows:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="simple-linear-regression-with-one-numerical-explanatory-variable.html#cb7-1" aria-hidden="true" tabindex="-1"></a>evals.scores <span class="ot">&lt;-</span> evals <span class="sc">%&gt;%</span></span>
+<span id="cb7-2"><a href="simple-linear-regression-with-one-numerical-explanatory-variable.html#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(score, bty_avg)</span></code></pre></div>
+<p><br></p>
+<p><strong>Task</strong>: Replace the <code>select</code> function with the <code>sample_n</code> function to look at a random subset of 10 instructors.</p>
+<div class="webex-solution">
+<button>
+Solution
+</button>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="simple-linear-regression-with-one-numerical-explanatory-variable.html#cb8-1" aria-hidden="true" tabindex="-1"></a>evals <span class="sc">%&gt;%</span></span>
+<span id="cb8-2"><a href="simple-linear-regression-with-one-numerical-explanatory-variable.html#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sample_n</span>(<span class="dv">10</span>)</span></code></pre></div>
+<pre><code># A tibble: 10 x 14
+      ID prof_ID score   age bty_avg gender ethnicity    language rank   pic_o~1
+   &lt;int&gt;   &lt;int&gt; &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt; &lt;fct&gt;  &lt;fct&gt;        &lt;fct&gt;    &lt;fct&gt;  &lt;fct&gt;  
+ 1   154      28   3.6    73    3    male   not minority english  tenur~ formal 
+ 2   268      50   4.8    33    5.83 female not minority english  tenur~ not fo~
+ 3   286      53   4      34    1.67 female not minority english  tenur~ not fo~
+ 4    29       6   4.9    62    5.5  male   not minority english  tenur~ formal 
+ 5     3       1   3.9    36    5    female minority     english  tenur~ not fo~
+ 6   410      83   4.7    47    6.67 female not minority english  teach~ not fo~
+ 7   179      34   4      47    4.33 female minority     english  tenur~ not fo~
+ 8   293      55   3.8    32    3.67 male   not minority english  tenur~ formal 
+ 9   248      48   3.9    50    3.17 female not minority english  teach~ not fo~
+10   379      77   3.9    38    2.5  female not minority english  teach~ not fo~
+# ... with 4 more variables: pic_color &lt;fct&gt;, cls_did_eval &lt;int&gt;,
+#   cls_students &lt;int&gt;, cls_level &lt;fct&gt;, and abbreviated variable name
+#   1: pic_outfit
+# i Use `colnames()` to see all variable names</code></pre>
+</div>
+<p><br></p>
+<p>The outcome variable <code>score</code> is a numerical average of the average teaching score based on students' evaluations between 1 and 5. The explanatory variable <code>bty_avg</code> is the numerical variable of the average beauty score from a panel of six students' scores between 1 and 10. As both variables are numerical, we can compute summary statistics for them using the <code>skim</code> function from the <code>skimr</code> package as follows:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="simple-linear-regression-with-one-numerical-explanatory-variable.html#cb10-1" aria-hidden="true" tabindex="-1"></a>evals.scores <span class="sc">%&gt;%</span></span>
+<span id="cb10-2"><a href="simple-linear-regression-with-one-numerical-explanatory-variable.html#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">skim</span>()</span></code></pre></div>
+<table>
+<caption><span id="tab:evals3">Table 1: </span>Data summary</caption>
+<tbody>
+<tr class="odd">
+<td align="left">Name</td>
+<td align="left">Piped data</td>
+</tr>
+<tr class="even">
+<td align="left">Number of rows</td>
+<td align="left">463</td>
+</tr>
+<tr class="odd">
+<td align="left">Number of columns</td>
+<td align="left">2</td>
+</tr>
+<tr class="even">
+<td align="left">_______________________</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">Column type frequency:</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">numeric</td>
+<td align="left">2</td>
+</tr>
+<tr class="odd">
+<td align="left">________________________</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">Group variables</td>
+<td align="left">None</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Variable type: numeric</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">skim_variable</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="right">mean</th>
+<th align="right">sd</th>
+<th align="right">p0</th>
+<th align="right">p25</th>
+<th align="right">p50</th>
+<th align="right">p75</th>
+<th align="right">p100</th>
+<th align="left">hist</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">score</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">4.17</td>
+<td align="right">0.54</td>
+<td align="right">2.30</td>
+<td align="right">3.80</td>
+<td align="right">4.30</td>
+<td align="right">4.6</td>
+<td align="right">5.00</td>
+<td align="left">▁▁▅▇▇</td>
+</tr>
+<tr class="even">
+<td align="left">bty_avg</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">4.42</td>
+<td align="right">1.53</td>
+<td align="right">1.67</td>
+<td align="right">3.17</td>
+<td align="right">4.33</td>
+<td align="right">5.5</td>
+<td align="right">8.17</td>
+<td align="left">▃▇▇▃▂</td>
+</tr>
+</tbody>
+</table>
+<p>This provides us with the following information:</p>
+<ul>
+<li><code>missing</code>: the number of missing values.</li>
+<li><code>complete</code>: the number of non-missing values.</li>
+<li><code>n</code>: the total number of observations.</li>
+<li><code>mean</code>: the mean or average.</li>
+<li><code>sd</code>: the standard deviation.</li>
+<li><code>p0</code>: the <span class="math inline">\(0^{th}\)</span> percentile: the value at which 0% of values are smaller than it (i.e. the <em>minimum</em>).</li>
+<li><code>p25</code>: the <span class="math inline">\(25^{th}\)</span> percentile: the value at which 25% of values are smaller than it (i.e. the <em>1st quartile</em>).</li>
+<li><code>p50</code>: the <span class="math inline">\(50^{th}\)</span> percentile: the value at which 50% of values are smaller than it (i.e. the <em>median</em>).</li>
+<li><code>p75</code>: the <span class="math inline">\(75^{th}\)</span> percentile: the value at which 75% of values are smaller than it (i.e. the <em>3rd quartile</em>).</li>
+<li><code>p100</code>: the <span class="math inline">\(100^{th}\)</span> percentile: the value at which 100% of values are smaller than it (i.e. the <em>maximum</em>).</li>
+<li><code>hist</code>: provides a snapshot of a histogram of the variable.</li>
+</ul>
+<p>These summary statistics give us an idea of how both variables are distributed. For example, the mean teaching score (<code>score</code>) is 4.17 out 5, while the mean beauty score (<code>bty_avg</code>) is 4.42 out of 10. Also, the middle 50% of the data for <code>score</code> lies between 3.8 and 4.6, while the middle 50% of <code>bty_avg</code> lies between 3.17 and 5.5.</p>
+<p><br></p>
+<strong>What is the minimum value of teaching score (<code>score</code>)?</strong>
+<div id="radio_BMWTBPSEXC" class="webex-radiogroup">
+<label><input type="radio" autocomplete="off" name="radio_BMWTBPSEXC" value=""></input> <span>2.5</span></label><label><input type="radio" autocomplete="off" name="radio_BMWTBPSEXC" value=""></input> <span>1.6</span></label><label><input type="radio" autocomplete="off" name="radio_BMWTBPSEXC" value=""></input> <span>1.7</span></label><label><input type="radio" autocomplete="off" name="radio_BMWTBPSEXC" value="answer"></input> <span>2.3</span></label>
+</div>
+<p><br></p>
+<strong>What is the maximum value of beauty score (<code>bty_avg</code>)?</strong>
+<div id="radio_NPGJVMIVGO" class="webex-radiogroup">
+<label><input type="radio" autocomplete="off" name="radio_NPGJVMIVGO" value=""></input> <span>8.4</span></label><label><input type="radio" autocomplete="off" name="radio_NPGJVMIVGO" value=""></input> <span>5.2</span></label><label><input type="radio" autocomplete="off" name="radio_NPGJVMIVGO" value=""></input> <span>5.0</span></label><label><input type="radio" autocomplete="off" name="radio_NPGJVMIVGO" value="answer"></input> <span>8.2</span></label>
+</div>
+<p><br></p>
+</div>
+<div id="correlation" class="section level2 unnumbered hasAnchor">
+<h2>Correlation<a href="simple-linear-regression-with-one-numerical-explanatory-variable.html#correlation" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>The above summary statistics provide information about each variable separately. However, we are interested in a potential relationship between the two variables and as such it would be of interest to evaluate some statistic that considers both variables simultaneously. One such statistic is the <strong>correlation</strong>, which ranges between -1 and 1 and describes the strength of the linear relationship between two numerical variables, such that</p>
+<ul>
+<li>-1 indicates a perfect <em>negative relationship</em>. That is, as the values of one variable increase, the values of the other decrease.</li>
+<li>0 indicates no relationship. The values of both variables increase/decrease independently of one another.</li>
+<li>1 indicates a perfect <em>positive relationship</em>. That is, the values of both variables increase simultaneously.</li>
+</ul>
+<p>The plot below displays scatterplots for hypothetical numerical variables <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> simulated to have different levels of correlation.</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:correlation2"></span>
+<img src="main_files/figure-html/correlation2-1.png" alt="Differing levels of correlation between variables." width="100%" />
+<p class="caption">
+Figure 1: Differing levels of correlation between variables.
+</p>
+</div>
+<p><br></p>
+<strong>Which plots (a)-(e) display positive correlation?</strong>
+<div id="radio_MLMGDJVUGB" class="webex-radiogroup">
+<label><input type="radio" autocomplete="off" name="radio_MLMGDJVUGB" value=""></input> <span>(c) and (d)</span></label><label><input type="radio" autocomplete="off" name="radio_MLMGDJVUGB" value="answer"></input> <span>(d) and (e)</span></label><label><input type="radio" autocomplete="off" name="radio_MLMGDJVUGB" value=""></input> <span>(c) and (e)</span></label><label><input type="radio" autocomplete="off" name="radio_MLMGDJVUGB" value=""></input> <span>(a) and (b)</span></label>
+</div>
+<p><br></p>
+<strong>Which plots (a)-(e) display negative correlation?</strong>
+<div id="radio_RILBQFTYNJ" class="webex-radiogroup">
+<label><input type="radio" autocomplete="off" name="radio_RILBQFTYNJ" value=""></input> <span>(a) and (c)</span></label><label><input type="radio" autocomplete="off" name="radio_RILBQFTYNJ" value=""></input> <span>(b) and (c)</span></label><label><input type="radio" autocomplete="off" name="radio_RILBQFTYNJ" value=""></input> <span>(d) and (e)</span></label><label><input type="radio" autocomplete="off" name="radio_RILBQFTYNJ" value="answer"></input> <span>(a) and (b)</span></label>
+</div>
+<p><br></p>
+<p>The correlation coefficient can be computed in R using the <code>get_correlation</code> function from the <code>moderndive</code> package. The function requires two numerical variables separated by <code>~</code> (or 'tilde'), much like the formula syntax, such that the outcome variable <code>score</code> is put on the left-hand-side of the formula, and the explanatory variable <code>bty_avg</code> is placed on the right-hand-side of the formula:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="simple-linear-regression-with-one-numerical-explanatory-variable.html#cb11-1" aria-hidden="true" tabindex="-1"></a>evals.scores <span class="sc">%&gt;%</span></span>
+<span id="cb11-2"><a href="simple-linear-regression-with-one-numerical-explanatory-variable.html#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">get_correlation</span>(<span class="at">formula =</span> score <span class="sc">~</span> bty_avg)</span></code></pre></div>
+<pre><code># A tibble: 1 x 1
+    cor
+  &lt;dbl&gt;
+1 0.187</code></pre>
+<p>Here, we are given a correlation coefficient of 0.187 for the relationship between teaching (<code>score</code>) and beauty (<code>bty_avg</code>) scores. This suggests a rather <em>weakly positive</em> linear relationship between the two variables. There is some subjective interpretation surrounding correlation coefficients not very close to -1, 0, 1. The table below provides a rough guide as to the verbal interpretation of a correlation coefficient.</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Correlation coefficient</th>
+<th align="left">Verbal interpretation</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">0.90 to 1.00 (-0.90 to -1.00)</td>
+<td align="left">Very strong positive (negative) correlation</td>
+</tr>
+<tr class="even">
+<td align="left">0.70 to 0.90 (-0.70 to -0.90)</td>
+<td align="left">Strong positive (negative) correlation</td>
+</tr>
+<tr class="odd">
+<td align="left">0.50 to 0.70 (-0.50 to -0.70)</td>
+<td align="left">Moderate positive (negative) correlation</td>
+</tr>
+<tr class="even">
+<td align="left">0.30 to 0.50 (-0.30 to -0.50)</td>
+<td align="left">Weak positive (negative) correlation</td>
+</tr>
+<tr class="odd">
+<td align="left">0.00 to 0.30 (0.00 to -0.30)</td>
+<td align="left">Very weak positive (negative) correlation</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Note</strong>: the <code>cor</code> function can also be used to compute the correlation coefficient. For more details type <code>?cor</code> into the R console.</p>
+<p>The next step in our exploratory data analysis is to visualise the data using appropriate plotting techniques. Here, a scatterplot is appropriate since both <code>score</code> and <code>bty_avg</code> are numerical variables:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="simple-linear-regression-with-one-numerical-explanatory-variable.html#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(evals.scores, <span class="fu">aes</span>(<span class="at">x =</span> bty_avg, <span class="at">y =</span> score)) <span class="sc">+</span></span>
+<span id="cb13-2"><a href="simple-linear-regression-with-one-numerical-explanatory-variable.html#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:correlationplot"></span>
+<img src="main_files/figure-html/correlationplot-1.png" alt="Relationship between teaching and beauty scores." width="90%" />
+<p class="caption">
+Figure 2: Relationship between teaching and beauty scores.
+</p>
+</div>
+<p><br></p>
+<p><strong>Task</strong>: Update the above code to give the plot more appropriate axes labels and a title similar to the scatterplot above.</p>
+<div class="webex-solution">
+<button>
+Hint
+</button>
+<p>You need to include the <code>labs</code> layer and provide it with the <code>x</code>, <code>y</code> and <code>title</code> arguments.
+<strong>Note</strong>: the outcome variable should always be plotted on the y-axis.</p>
+</div>
+<div class="webex-solution">
+<button>
+Solution
+</button>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="simple-linear-regression-with-one-numerical-explanatory-variable.html#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(evals.scores, <span class="fu">aes</span>(<span class="at">x =</span> bty_avg, <span class="at">y =</span> score)) <span class="sc">+</span></span>
+<span id="cb14-2"><a href="simple-linear-regression-with-one-numerical-explanatory-variable.html#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb14-3"><a href="simple-linear-regression-with-one-numerical-explanatory-variable.html#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Beauty Score&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Teaching Score&quot;</span>, </span>
+<span id="cb14-4"><a href="simple-linear-regression-with-one-numerical-explanatory-variable.html#cb14-4" aria-hidden="true" tabindex="-1"></a>       <span class="at">title =</span> <span class="st">&quot;Relationship of teaching and beauty scores&quot;</span>)</span></code></pre></div>
+<p><img src="main_files/figure-html/Task3-solution-1.png" width="672" /></p>
+</div>
+<p><br></p>
+<p>What can we observe from the scatterplot? Well, here it can be hard to see the weakly positive linear relationship suggested by the correlation coefficient (0.187), which is why our correlation coefficient is considered <em>very weak</em> in the verbal interpretation.</p>
+<p>Additionally, as our numerical variables are averages of integers (or whole numbers), a lot of the values will be plotted on top of one another. Remember, from Week 1, that this is referred to as <strong>over-plotting</strong>, and can be alleviated by slightly nudging (<strong>jittering</strong>) the points in a random direction. For example, let's look at the three points in the top-right of the scatterplot that have a beauty score slightly less than 8. Are there really only three values plotted there, or are there more that we cannot see due to over-plotting? Let's find out by adding some jitter to the plot:</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:correlation5"></span>
+<img src="main_files/figure-html/correlation5-1.png" alt="Comparing regular and jittered scatterplots." width="768" />
+<p class="caption">
+Figure 3: Comparing regular and jittered scatterplots.
+</p>
+</div>
+<p>From the jittered scatterplot we can see that:</p>
+<ol style="list-style-type: decimal">
+<li>There are actually more than just three points plotted in the top-right; and</li>
+<li>There are more instructors with a beauty score between 3 and 4.5 than originally appears due to over-plotting.</li>
+</ol>
+<p><strong>Note</strong>: jittering does not actually change the values within a data set, it is merely a tool for visualisation purposes. Hence, we shall continue on with plotting the original data.</p>
+<p><br></p>
+</div>
+<div id="formal-analysis" class="section level2 unnumbered hasAnchor">
+<h2>Formal analysis<a href="simple-linear-regression-with-one-numerical-explanatory-variable.html#formal-analysis" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>After completing an exploratory data analysis the next step is to perform a <strong>formal analysis</strong> on the data. This involves constructing an appropriate statistical model from the information gathered during the exploratory data analysis step. Here, we shall be fitting a simple linear regression model to the data on teaching and beauty scores, where our objective is to acquire the best fitting regression line. This is done by finding estimates of the intercept (<span class="math inline">\(\alpha\)</span>) and slope (<span class="math inline">\(\beta\)</span>) which give us the best-fitting line to the data. This can be done in R using the <code>lm</code> function to fit a linear model to the data as follows:</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="simple-linear-regression-with-one-numerical-explanatory-variable.html#cb15-1" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">lm</span>(score <span class="sc">~</span> bty_avg, <span class="at">data =</span> evals.scores)</span>
+<span id="cb15-2"><a href="simple-linear-regression-with-one-numerical-explanatory-variable.html#cb15-2" aria-hidden="true" tabindex="-1"></a>model</span></code></pre></div>
+<pre><code>
+Call:
+lm(formula = score ~ bty_avg, data = evals.scores)
+
+Coefficients:
+(Intercept)      bty_avg  
+    3.88034      0.06664  </code></pre>
+<p>This tells us that our best-fitting line to the data is:</p>
+<p><span class="math display">\[\widehat{\mbox{score}} = \widehat{\alpha} + \widehat{\beta} x_i = 3.88  + 0.067 \cdot \mbox{bty_avg}\]</span></p>
+<p>where</p>
+<ul>
+<li><span class="math inline">\(\widehat{\alpha} = 3.880338\)</span> is the intercept coefficient and means that, for any instructor with a <code>bty_avg = 0</code>, their average teaching <code>score</code> would be 3.8803. Note that <code>bty_avg = 0</code> is not actually possible as <code>bty_avg</code> is an average of beauty scores ranging between 1 and 10.</li>
+<li><span class="math inline">\(\widehat{\beta} = 0.066637\)</span> is the slope coefficient associated with the exploratory variable <code>bty_avg</code>, and summarises the relationship between <code>score</code> and <code>bty_avg</code>. That is, as <code>bty_avg</code> increases, so does <code>score</code>, such that
+<ul>
+<li>For every 1 unit increase in <code>bty_avg</code>, there is an associated increase of, on average, 0.067 units of <code>score</code>.</li>
+</ul></li>
+</ul>
+<p>Finally, we can superimpose our best-fitting line onto our scatterplot to see how it fits through the points using the <code>geom_smooth</code> function as follows:</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="simple-linear-regression-with-one-numerical-explanatory-variable.html#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(evals.scores, <span class="fu">aes</span>(<span class="at">x =</span> bty_avg, <span class="at">y =</span> score)) <span class="sc">+</span></span>
+<span id="cb17-2"><a href="simple-linear-regression-with-one-numerical-explanatory-variable.html#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb17-3"><a href="simple-linear-regression-with-one-numerical-explanatory-variable.html#cb17-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Beauty Score&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Teaching Score&quot;</span>, </span>
+<span id="cb17-4"><a href="simple-linear-regression-with-one-numerical-explanatory-variable.html#cb17-4" aria-hidden="true" tabindex="-1"></a>       <span class="at">title =</span> <span class="st">&quot;Relationship of teaching and beauty scores&quot;</span>) <span class="sc">+</span></span>
+<span id="cb17-5"><a href="simple-linear-regression-with-one-numerical-explanatory-variable.html#cb17-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">&quot;lm&quot;</span>, <span class="at">se =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:lm2"></span>
+<img src="main_files/figure-html/lm2-1.png" alt="Relationship between teaching and beauty scores with regression line superimposed." width="90%" />
+<p class="caption">
+Figure 4: Relationship between teaching and beauty scores with regression line superimposed.
+</p>
+</div>
+<p>Now that we have fitted our simple linear regression model to the data, how do we use it to obtain information on individual data points? This can be done by looking at the <strong>fitted values</strong>. For example, let's say we are interested in looking at the 21st instructor who has the following teaching and beauty scores:</p>
+<table>
+<thead>
+<tr class="header">
+<th align="right"><code>score</code></th>
+<th align="right"><code>bty_avg</code></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">4.9</td>
+<td align="right">7.33</td>
+</tr>
+</tbody>
+</table>
+<p>What would the <code>score</code> be on our best-fitting line for this instructor with a <code>bty_avg</code> of 7.33? We simply plug the instructor's <code>bty_avg</code> into our regression model:</p>
+<p><span class="math display">\[\widehat{\mbox{score}} = 3.88034 + 0.06664 \cdot \mbox{bty_avg} = 3.88034 + 0.06664 \cdot 7.33 = 4.369,\]</span>
+The regression model gives our instructor a <code>score</code> of 4.369. However, we know the <code>score</code> of the instructor is 4.9 meaning that our model was out by 0.531. This is known as the <strong>residual</strong> (<span class="math inline">\(\epsilon\)</span>) and can be thought of as the error or <em>lack of fit</em> of the regression line. In this case, the residual is given by:</p>
+<p><span class="math display">\[ \widehat{\epsilon} = y - \widehat{y} = 4.9 - 4.369 = 0.531.\]</span>
+This is essentially the distance between the fitted regression line and the observed (true) value. This can be seen on the following scatterplot:</p>
+<pre><code>`geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:lm3"></span>
+<img src="main_files/figure-html/lm3-1.png" alt="Example of observed value, fitted value, and residual." width="90%" />
+<p class="caption">
+Figure 5: Example of observed value, fitted value, and residual.
+</p>
+</div>
+<p>where</p>
+<ul>
+<li>the red circle is the observed (true) <code>score</code> (<span class="math inline">\(y=4.9\)</span>) of the instructor;</li>
+<li>the red square is the fitted value (<span class="math inline">\(\widehat{y} = 4.369\)</span>) from the regression line; and</li>
+<li>the blue arrow is the distance between the observed and fitted values, that is, the residual.</li>
+</ul>
+<p><br></p>
+<p><strong>Task</strong>: Obtain the observed <code>score</code> and <code>bty_avg</code> for the 27th instructor.</p>
+<div class="webex-solution">
+<button>
+Hint
+</button>
+<p>Pick out the 27th row of the <code>evals.scores</code> data set.</p>
+</div>
+<div class="webex-solution">
+<button>
+Solution
+</button>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="simple-linear-regression-with-one-numerical-explanatory-variable.html#cb19-1" aria-hidden="true" tabindex="-1"></a>evals.scores[<span class="dv">27</span>, ]</span></code></pre></div>
+<pre><code># A tibble: 1 x 2
+  score bty_avg
+  &lt;dbl&gt;   &lt;dbl&gt;
+1   4.5     5.5</code></pre>
+</div>
+<p><br></p>
+<strong>Using the regression model, find the fitted value of <code>score</code> for the 13th instructor?</strong>
+<div id="radio_OWLUNFLJXN" class="webex-radiogroup">
+<label><input type="radio" autocomplete="off" name="radio_OWLUNFLJXN" value=""></input> <span>4.6</span></label><label><input type="radio" autocomplete="off" name="radio_OWLUNFLJXN" value="answer"></input> <span>4.1</span></label><label><input type="radio" autocomplete="off" name="radio_OWLUNFLJXN" value=""></input> <span>3.2</span></label><label><input type="radio" autocomplete="off" name="radio_OWLUNFLJXN" value=""></input> <span>3.9</span></label>
+</div>
+<p><br></p>
+<strong>Using the regression model, find the value of the <code>residual</code> error for the 56th instructor?</strong>
+<div id="radio_CAMHPEGNVD" class="webex-radiogroup">
+<label><input type="radio" autocomplete="off" name="radio_CAMHPEGNVD" value=""></input> <span>0.41</span></label><label><input type="radio" autocomplete="off" name="radio_CAMHPEGNVD" value="answer"></input> <span>0.35</span></label><label><input type="radio" autocomplete="off" name="radio_CAMHPEGNVD" value=""></input> <span>0.28</span></label><label><input type="radio" autocomplete="off" name="radio_CAMHPEGNVD" value=""></input> <span>0.31</span></label>
+</div>
+<p><br></p>
+<p>To obtain the fitted values and residuals for all instructors within the data set we can use the <code>get_regression_points</code> function:</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="simple-linear-regression-with-one-numerical-explanatory-variable.html#cb21-1" aria-hidden="true" tabindex="-1"></a>regression.points <span class="ot">&lt;-</span> <span class="fu">get_regression_points</span>(model)</span>
+<span id="cb21-2"><a href="simple-linear-regression-with-one-numerical-explanatory-variable.html#cb21-2" aria-hidden="true" tabindex="-1"></a>regression.points</span></code></pre></div>
+<pre><code># A tibble: 463 x 5
+      ID score bty_avg score_hat residual
+   &lt;int&gt; &lt;dbl&gt;   &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
+ 1     1   4.7    5         4.21    0.486
+ 2     2   4.1    5         4.21   -0.114
+ 3     3   3.9    5         4.21   -0.314
+ 4     4   4.8    5         4.21    0.586
+ 5     5   4.6    3         4.08    0.52 
+ 6     6   4.3    3         4.08    0.22 
+ 7     7   2.8    3         4.08   -1.28 
+ 8     8   4.1    3.33      4.10   -0.002
+ 9     9   3.4    3.33      4.10   -0.702
+10    10   4.5    3.17      4.09    0.409
+# ... with 453 more rows
+# i Use `print(n = ...)` to see more rows</code></pre>
+<p>The table provides us with information on the:</p>
+<ul>
+<li><code>score</code>: the observed value of the outcome variable <span class="math inline">\(y\)</span>;</li>
+<li><code>bty_avg</code>: the values of the explanatory variable <span class="math inline">\(x\)</span>;</li>
+<li><code>score_hat</code>: the values of the fitted values <span class="math inline">\(\widehat{y}\)</span>; and</li>
+<li><code>residual</code>: the residuals <span class="math inline">\(y - \widehat{y}\)</span>.</li>
+</ul>
+<p><br></p>
+<strong>Using the table above, find the fitted value of <code>score</code> for the 72nd instructor?</strong>
+<div id="radio_JWLTOAFRDQ" class="webex-radiogroup">
+<label><input type="radio" autocomplete="off" name="radio_JWLTOAFRDQ" value=""></input> <span>4.3</span></label><label><input type="radio" autocomplete="off" name="radio_JWLTOAFRDQ" value=""></input> <span>3.7</span></label><label><input type="radio" autocomplete="off" name="radio_JWLTOAFRDQ" value=""></input> <span>3.9</span></label><label><input type="radio" autocomplete="off" name="radio_JWLTOAFRDQ" value="answer"></input> <span>4.2</span></label>
+</div>
+<p><br></p>
+<strong>Using the table above, find the value of the <code>residual</code> error for the 44th instructor?</strong>
+<div id="radio_PCPVUBDKZZ" class="webex-radiogroup">
+<label><input type="radio" autocomplete="off" name="radio_PCPVUBDKZZ" value=""></input> <span>0.66</span></label><label><input type="radio" autocomplete="off" name="radio_PCPVUBDKZZ" value="answer"></input> <span>0.61</span></label><label><input type="radio" autocomplete="off" name="radio_PCPVUBDKZZ" value=""></input> <span>0.55</span></label><label><input type="radio" autocomplete="off" name="radio_PCPVUBDKZZ" value=""></input> <span>0.59</span></label>
+</div>
+<p><br></p>
+</div>
+<div id="assessing-model-fit" class="section level2 unnumbered hasAnchor">
+<h2>Assessing model fit<a href="simple-linear-regression-with-one-numerical-explanatory-variable.html#assessing-model-fit" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>When we fit a simple linear regression model there are five main assumptions that we need to hold true in order for the model to be an appropriate fit to the data. These assumptions are:</p>
+<ol style="list-style-type: decimal">
+<li>The deterministic part of the model captures all the non-random structure in the data, i.e. the residuals have mean zero.</li>
+<li>The scale of the variability of the residuals is constant at all values of the explanatory variables.</li>
+<li>The residuals are normally distributed.</li>
+<li>The residuals are independent.</li>
+<li>The values of the explanatory variables are recorded without error.</li>
+</ol>
+<p>One way we can check our first assumption is to plot the residuals (<code>residuals</code>) against the explanatory variable (<code>bty_avg</code>). From this we should be able to check that the explanatory variable has a linear relationship with the outcome variable (<code>score</code>). We can plot the residuals against our explanatory variable using:</p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="simple-linear-regression-with-one-numerical-explanatory-variable.html#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(regression.points, <span class="fu">aes</span>(<span class="at">x =</span> bty_avg, <span class="at">y =</span> residual)) <span class="sc">+</span></span>
+<span id="cb23-2"><a href="simple-linear-regression-with-one-numerical-explanatory-variable.html#cb23-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb23-3"><a href="simple-linear-regression-with-one-numerical-explanatory-variable.html#cb23-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Beauty Score&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Residual&quot;</span>) <span class="sc">+</span></span>
+<span id="cb23-4"><a href="simple-linear-regression-with-one-numerical-explanatory-variable.html#cb23-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">0</span>, <span class="at">col =</span> <span class="st">&quot;blue&quot;</span>, <span class="at">size =</span> <span class="dv">1</span>)</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:lm6"></span>
+<img src="main_files/figure-html/lm6-1.png" alt="Residuals against beauty score." width="90%" />
+<p class="caption">
+Figure 6: Residuals against beauty score.
+</p>
+</div>
+<p>Ideally, for the first assumption to hold we should observe the following:</p>
+<ul>
+<li>There should be no systematic pattern, i.e. the residuals should appear randomly scattered.</li>
+<li>The residuals should have mean zero. That is, they should be evenly scattered above and below the zero line. This is because the regression model will overestimate some of the fitted values, but it will also underestimate some, and hence, on average, they should even out to have mean zero.</li>
+</ul>
+<p><br></p>
+<strong>Does the first assumption appear to hold from the scatterplot of the residuals against the explanatory variable?</strong>
+<div id="radio_HSUQXBMPCY" class="webex-radiogroup">
+<label><input type="radio" autocomplete="off" name="radio_HSUQXBMPCY" value="answer"></input> <span>Yes</span></label><label><input type="radio" autocomplete="off" name="radio_HSUQXBMPCY" value=""></input> <span>No</span></label>
+</div>
+<p><br></p>
+<p>We can examine our first two assumptions by also plotting the residuals against the fitted values as follows:</p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="simple-linear-regression-with-one-numerical-explanatory-variable.html#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(regression.points, <span class="fu">aes</span>(<span class="at">x =</span> score_hat, <span class="at">y =</span> residual)) <span class="sc">+</span></span>
+<span id="cb24-2"><a href="simple-linear-regression-with-one-numerical-explanatory-variable.html#cb24-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb24-3"><a href="simple-linear-regression-with-one-numerical-explanatory-variable.html#cb24-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Fitted values&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Residual&quot;</span>) <span class="sc">+</span></span>
+<span id="cb24-4"><a href="simple-linear-regression-with-one-numerical-explanatory-variable.html#cb24-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">0</span>, <span class="at">col =</span> <span class="st">&quot;blue&quot;</span>, <span class="at">size =</span> <span class="dv">1</span>)</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:lm7"></span>
+<img src="main_files/figure-html/lm7-1.png" alt="Residuals against fitted values." width="90%" />
+<p class="caption">
+Figure 7: Residuals against fitted values.
+</p>
+</div>
+<p>From the plot of the residuals against the fitted values we want to examine whether:</p>
+<ul>
+<li>The residuals have mean zero.</li>
+<li>If the residuals have constant variance across all levels of the fitted values. That is, the range (or spread) of the residuals should be similar across all levels of the fitted values and display no obvious changes in variability.</li>
+</ul>
+<p><br></p>
+<strong>Do assumptions 1. and 2. appear to hold from the plot of the residuals against the fitted values?</strong>
+<div id="radio_EVUQYSMFEK" class="webex-radiogroup">
+<label><input type="radio" autocomplete="off" name="radio_EVUQYSMFEK" value="answer"></input> <span>Yes</span></label><label><input type="radio" autocomplete="off" name="radio_EVUQYSMFEK" value=""></input> <span>No</span></label>
+</div>
+<p><br></p>
+<p><strong>Task</strong>: Examine the following residual plots before answering the questions below.</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:lm8"></span>
+<img src="main_files/figure-html/lm8-1.png" alt="Examples of different residual patterns." width="960" />
+<p class="caption">
+Figure 8: Examples of different residual patterns.
+</p>
+</div>
+<p><br></p>
+<strong>Do the assumptions hold for Example 1?</strong>
+<div id="radio_AQMEJYLPWC" class="webex-radiogroup">
+<label><input type="radio" autocomplete="off" name="radio_AQMEJYLPWC" value=""></input> <span>Yes</span></label><label><input type="radio" autocomplete="off" name="radio_AQMEJYLPWC" value="answer"></input> <span>No</span></label>
+</div>
+<p><br></p>
+<strong>Do the assumptions hold for Example 2?</strong>
+<div id="radio_RVEEFQMNNR" class="webex-radiogroup">
+<label><input type="radio" autocomplete="off" name="radio_RVEEFQMNNR" value=""></input> <span>Yes</span></label><label><input type="radio" autocomplete="off" name="radio_RVEEFQMNNR" value="answer"></input> <span>No</span></label>
+</div>
+<p><br></p>
+<p>To assess our third assumption that the residuals are normally distributed we can simply plot a histogram of the residuals:</p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="simple-linear-regression-with-one-numerical-explanatory-variable.html#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(regression.points, <span class="fu">aes</span>(<span class="at">x =</span> residual)) <span class="sc">+</span></span>
+<span id="cb25-2"><a href="simple-linear-regression-with-one-numerical-explanatory-variable.html#cb25-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">binwidth =</span> <span class="fl">0.25</span>, <span class="at">color =</span> <span class="st">&quot;white&quot;</span>) <span class="sc">+</span></span>
+<span id="cb25-3"><a href="simple-linear-regression-with-one-numerical-explanatory-variable.html#cb25-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Residual&quot;</span>)</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:lm9"></span>
+<img src="main_files/figure-html/lm9-1.png" alt="Histogram of residuals." width="90%" />
+<p class="caption">
+Figure 9: Histogram of residuals.
+</p>
+</div>
+<p>Ideally, for the assumption of normally distributed residuals, the histogram should be bell-shaped and centred at zero, i.e. the residuals have mean zero. However, in practice this will almost never be the case, and as such, like the plots of the residuals, there is some subjectivity in whether you believe the assumptions hold. For instance, here we can see that the histogram is slightly skewed to the left in that the distribution has a longer tail to the left. However, in my opinion, this is not of much concern as the histogram appears to be relatively symmetrical and bell-shaped, and as such the assumption of normally distributed random errors appears valid in this case.</p>
+<p>Finally, assumptions 4. and 5. are often justified on the basis of the experimental context and are not formally examined.</p>
+<p><br>
+<br></p>
+
+</div>
+</div>
+<script>
+
+/* update total correct if #webex-total_correct exists */
+update_total_correct = function() {
+  console.log("webex: update total_correct");
+
+  if (t = document.getElementById("webex-total_correct")) {
+    var correct = document.getElementsByClassName("webex-correct").length;
+    var solvemes = document.getElementsByClassName("webex-solveme").length;
+    var radiogroups = document.getElementsByClassName("webex-radiogroup").length;
+    var selects = document.getElementsByClassName("webex-select").length;
+    
+    t.innerHTML = correct + " of " + (solvemes + radiogroups + selects) + " correct";
+  }
+}
+
+/* webex-solution button toggling function */
+b_func = function() {
+  console.log("webex: toggle hide");
+  
+  var cl = this.parentElement.classList;
+  if (cl.contains('open')) {
+    cl.remove("open");
+  } else {
+    cl.add("open");
+  }
+}
+
+/* function for checking solveme answers */
+solveme_func = function(e) {
+  console.log("webex: check solveme");
+
+  var real_answers = JSON.parse(this.dataset.answer);
+  var my_answer = this.value;
+  var cl = this.classList;
+  if (cl.contains("ignorecase")) {
+    my_answer = my_answer.toLowerCase();
+  }
+  if (cl.contains("nospaces")) {
+    my_answer = my_answer.replace(/ /g, "")
+  }
+
+  if (my_answer == "") {
+    cl.remove("webex-correct");
+    cl.remove("webex-incorrect");
+  } else if (real_answers.includes(my_answer)) {
+    cl.add("webex-correct");
+    cl.remove("webex-incorrect");
+  } else {
+    cl.add("webex-incorrect");
+    cl.remove("webex-correct");
+  }
+
+  // match numeric answers within a specified tolerance
+  if(this.dataset.tol > 0){
+    var tol = JSON.parse(this.dataset.tol);
+    var matches = real_answers.map(x => Math.abs(x - my_answer) < tol)
+    if (matches.reduce((a, b) => a + b, 0) > 0) {
+      cl.add("webex-correct");
+    } else {
+      cl.remove("webex-correct");
+    }
+  }
+
+  // added regex bit
+  if (cl.contains("regex")){
+    answer_regex = RegExp(real_answers.join("|"))
+    if (answer_regex.test(my_answer)) {
+      cl.add("webex-correct");
+    }
+  }
+
+  update_total_correct();
+}
+
+/* function for checking select answers */
+select_func = function(e) {
+  console.log("webex: check select");
+  
+  var cl = this.classList
+  
+  /* add style */
+  cl.remove("webex-incorrect");
+  cl.remove("webex-correct");
+  if (this.value == "answer") {
+    cl.add("webex-correct");
+  } else if (this.value != "blank") {
+    cl.add("webex-incorrect");
+  }
+  
+  update_total_correct();
+}
+
+/* function for checking radiogroups answers */
+radiogroups_func = function(e) {
+  console.log("webex: check radiogroups");
+
+  var checked_button = document.querySelector('input[name=' + this.id + ']:checked');
+  var cl = checked_button.parentElement.classList;
+  var labels = checked_button.parentElement.parentElement.children;
+  
+  /* get rid of styles */
+  for (i = 0; i < labels.length; i++) {
+    labels[i].classList.remove("webex-incorrect");
+    labels[i].classList.remove("webex-correct");
+  }
+  
+  /* add style */
+  if (checked_button.value == "answer") {
+    cl.add("webex-correct");
+  } else {
+    cl.add("webex-incorrect");
+  }
+  
+  update_total_correct();
+}
+
+window.onload = function() {
+  console.log("onload");
+  /* set up solution buttons */
+  var buttons = document.getElementsByTagName("button");
+
+  for (var i = 0; i < buttons.length; i++) {
+    if (buttons[i].parentElement.classList.contains('webex-solution')) {
+      buttons[i].onclick = b_func;
+    }
+  }
+
+  /* set up webex-solveme inputs */
+  var solveme = document.getElementsByClassName("webex-solveme");
+
+  for (var i = 0; i < solveme.length; i++) {
+    /* make sure input boxes don't auto-anything */
+    solveme[i].setAttribute("autocomplete","off");
+    solveme[i].setAttribute("autocorrect", "off");
+    solveme[i].setAttribute("autocapitalize", "off");
+    solveme[i].setAttribute("spellcheck", "false");
+    solveme[i].value = "";
+
+    /* adjust answer for ignorecase or nospaces */
+    var cl = solveme[i].classList;
+    var real_answer = solveme[i].dataset.answer;
+    if (cl.contains("ignorecase")) {
+      real_answer = real_answer.toLowerCase();
+    }
+    if (cl.contains("nospaces")) {
+      real_answer = real_answer.replace(/ /g, "");
+    }
+    solveme[i].dataset.answer = real_answer;
+
+    /* attach checking function */
+    solveme[i].onkeyup = solveme_func;
+    solveme[i].onchange = solveme_func;
+  }
+  
+  /* set up radiogroups */
+  var radiogroups = document.getElementsByClassName("webex-radiogroup");
+  for (var i = 0; i < radiogroups.length; i++) {
+    radiogroups[i].onchange = radiogroups_func;
+  }
+  
+  /* set up selects */
+  var selects = document.getElementsByClassName("webex-select");
+  for (var i = 0; i < selects.length; i++) {
+    selects[i].onchange = select_func;
+  }
+
+  update_total_correct();
+}
+
+</script>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="simple-linear-regression.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="simple-linear-regression-with-one-categorical-explanatory-variable.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": null,
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["main.pdf", "main.epub"],
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "subsection",
+"scroll_highlight": true
+},
+"info": true
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

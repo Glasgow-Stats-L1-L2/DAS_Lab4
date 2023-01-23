@@ -1,0 +1,552 @@
+# Simple linear regression with one numerical explanatory variable {-}
+
+Create a `.Rmd` file to load the following packages into R:
+
+```{r libraries, echo = TRUE, eval = TRUE, warning = FALSE, message = FALSE}
+library(ggplot2)
+library(dplyr)
+library(moderndive)
+library(gapminder)
+library(skimr)
+```
+
+```{r libraries2, echo = FALSE, eval = TRUE, warning = FALSE, message = FALSE}
+library(mvtnorm)
+library(gridExtra)
+library(tidyr)
+```
+
+Student feedback in higher education is extremely important when it comes to the evaluation of teaching techniques, materials, and improvements in teaching methods and technologies. However, there have been studies into potential bias factors when feedback is provided, such as the physical appearance of the teacher; see [Economics of Education Review](https://www.journals.elsevier.com/economics-of-education-review/) for details. Here, we shall look at a study from student evaluations of $n=463$ professors from The University of Texas at Austin. In particular, we will examine the evaluation scores of the instructors based purely on one numerical variable: their *beauty score*. Therefore, our simple linear regression model will consist of:
+
+  * the numerical outcome variable *teaching score* ($y$); and
+  * the numerical explanatory variable *beauty score* ($x$).
+
+## Exploratory data analysis {-}
+
+Before you ever do any statistical modelling of data, you should always perform an **exploratory data analysis** of the data. Performing an exploratory data analysis can give us an idea of the distribution of the data, and whether it contains any strange values, such as **outliers** or **missing values**. However, more importantly, it is used to inform which statistical model we should fit to the data. An exploratory data analysis may involve:
+
+1. Looking at the raw values of the data, either by looking at the spreadsheet directly, or using R.
+2. By computing various summary statistics, such as the *five-number summary*, means, and standard deviations.
+3. Plotting the data using various data visualisation techniques.
+
+Let's examine the data `evals`. We can look at the raw values from `evals` using the RStudio pop-up spreadsheet viewer using:
+
+```{r view, echo = TRUE, eval = FALSE, warning = FALSE}
+View(evals)
+```
+
+<br>
+
+**Task**: Use other functions you have learned to have a peek at the `evals` data set.
+
+`r hide("Hint")`
+You may want to use the `glimpse` and `head` functions.
+`r unhide()`
+
+```{r Task1-solution, webex.hide="Solution", echo=TRUE, eval=TRUE}
+head(evals)
+glimpse(evals)
+```
+
+```{r MCQ1}
+opts_Q1 <- sample(c("13",
+                    answer = "463",
+                    "512",
+                    "18"))
+```
+
+<br>
+
+**How many observations are in the `evals` data set?**
+`r longmcq(opts_Q1)`
+
+<br>
+
+At the moment we are only really interested in the instructors teaching (`score`) and beauty (`bty_avg`) scores, and so we can look at a subset of the data as follows:
+
+```{r evals, echo = TRUE, eval = TRUE, warning = FALSE}
+evals.scores <- evals %>%
+  select(score, bty_avg)
+```
+
+<br>
+
+**Task**: Replace the `select` function with the `sample_n` function to look at a random subset of 10 instructors.
+
+```{r Task2-solution, webex.hide="Solution", echo=TRUE, eval=TRUE}
+evals %>%
+  sample_n(10)
+```
+
+<br>
+
+The outcome variable `score` is a numerical average of the average teaching score based on students' evaluations between 1 and 5. The explanatory variable `bty_avg` is the numerical variable of the average beauty score from a panel of six students' scores between 1 and 10. As both variables are numerical, we can compute summary statistics for them using the `skim` function from the `skimr` package as follows:
+
+```{r evals3, echo = TRUE, eval = TRUE, warning = FALSE}
+evals.scores %>%
+  skim()
+```
+
+This provides us with the following information:
+
+  * `missing`: the number of missing values.
+  * `complete`: the number of non-missing values.
+  * `n`: the total number of observations.
+  * `mean`: the mean or average.
+  * `sd`: the standard deviation.
+  * `p0`: the $0^{th}$ percentile: the value at which 0% of values are smaller than it (i.e.\ the *minimum*).
+  * `p25`: the $25^{th}$ percentile: the value at which 25% of values are smaller than it (i.e.\ the *1st quartile*).
+  * `p50`: the $50^{th}$ percentile: the value at which 50% of values are smaller than it (i.e.\ the *median*).
+  * `p75`: the $75^{th}$ percentile: the value at which 75% of values are smaller than it (i.e.\ the *3rd quartile*).
+  * `p100`: the $100^{th}$ percentile: the value at which 100% of values are smaller than it (i.e.\ the *maximum*).
+  * `hist`: provides a snapshot of a histogram of the variable.
+
+These summary statistics give us an idea of how both variables are distributed. For example, the mean teaching score (`score`) is 4.17 out 5, while the mean beauty score (`bty_avg`) is 4.42 out of 10. Also, the middle 50% of the data for `score` lies between 3.8 and 4.6, while the middle 50% of `bty_avg` lies between 3.17 and 5.5.
+
+```{r MCQ2}
+opts_Q2 <- sample(c("2.5",
+                    answer = "2.3",
+                    "1.6",
+                    "1.7"))
+```
+
+<br>
+
+**What is the minimum value of teaching score (`score`)?**
+`r longmcq(opts_Q2)`
+
+<br>
+
+```{r MCQ3}
+opts_Q3 <- sample(c("5.0",
+                    answer = "8.2",
+                    "8.4",
+                    "5.2"))
+```
+
+**What is the maximum value of beauty score (`bty_avg`)?**
+`r longmcq(opts_Q3)`
+
+<br>
+<br>
+
+
+## Correlation {-}
+
+The above summary statistics provide information about each variable separately. However, we are interested in a potential relationship between the two variables and as such it would be of interest to evaluate some statistic that considers both variables simultaneously. One such statistic is the **correlation**, which ranges between -1 and 1 and describes the strength of the linear relationship between two numerical variables, such that
+
+  * -1 indicates a perfect *negative relationship*. That is, as the values of one variable increase, the values of the other decrease.
+  * 0 indicates no relationship. The values of both variables increase/decrease independently of one another.
+  * 1 indicates a perfect *positive relationship*. That is, the values of both variables increase simultaneously.
+
+The plot below displays scatterplots for hypothetical numerical variables $x$ and $y$ simulated to have different levels of correlation.
+
+```{r correlation, echo = FALSE, eval = TRUE, warning = FALSE}
+correlation <- c(-0.9999, -0.75, 0, 0.75, 0.9999)
+cor_names <- c(`-1` = "(a)", `-0.75` = "(b)", `0` = "(c)", `0.75` = "(d)", `1` = "(e)")
+
+n_sim <- 100
+
+values <- NULL
+for(i in seq_len(length(correlation))){
+  rho <- correlation[i]
+  sigma <- matrix(c(5, rho * sqrt(50), rho * sqrt(50), 10), 2, 2)
+  sim <- rmvnorm(
+    n = n_sim,
+    mean = c(20,40),
+    sigma = sigma
+    ) %>%
+    as_data_frame() %>%
+    # mutate(correlation = round(rho, 2), name = as.character(rep(names(correlation)[i], n_sim)))
+        mutate(correlation = round(rho, 2))
+
+  values <- bind_rows(values, sim)
+}
+```
+
+```{r correlation2, echo = FALSE, eval = TRUE, warning = FALSE, out.width = '100%', fig.align = "center", fig.cap = "Figure 1: Differing levels of correlation between variables."}
+ggplot(data = values, mapping = aes(V1, V2)) +
+  geom_point() +
+  facet_wrap(~ correlation, nrow = 2, labeller = as_labeller(cor_names)) +
+  labs(x = "x", y = "y") +
+  theme(
+    axis.text.x = element_blank(),
+    axis.text.y = element_blank(),
+    axis.ticks = element_blank()
+  )
+```
+
+```{r MCQ4}
+opts_Q4 <- sample(c("(a) and (b)",
+                    answer = "(d) and (e)",
+                    "(c) and (d)",
+                    "(c) and (e)"))
+```
+
+<br>
+
+**Which plots (a)-(e) display positive correlation?**
+`r longmcq(opts_Q4)`
+
+```{r MCQ5}
+opts_Q5 <- sample(c("(d) and (e)",
+                    answer = "(a) and (b)",
+                    "(b) and (c)",
+                    "(a) and (c)"))
+```
+
+<br>
+
+**Which plots (a)-(e) display negative correlation?**
+`r longmcq(opts_Q5)`
+
+<br>
+
+The correlation coefficient can be computed in R using the `get_correlation` function from the `moderndive` package. The function requires two numerical variables separated by `~` (or 'tilde'), much like the formula syntax, such that the outcome variable `score` is put on the left-hand-side of the formula, and the explanatory variable `bty_avg` is placed on the right-hand-side of the formula:
+
+```{r correlation3, echo = TRUE, eval = TRUE, warning = FALSE}
+evals.scores %>%
+  get_correlation(formula = score ~ bty_avg)
+```
+
+Here, we are given a correlation coefficient of 0.187 for the relationship between teaching (`score`) and beauty (`bty_avg`) scores. This suggests a rather *weakly positive* linear relationship between the two variables. There is some subjective interpretation surrounding correlation coefficients not very close to -1, 0, 1. The table below provides a rough guide as to the verbal interpretation of a correlation coefficient.
+
+Correlation coefficient | Verbal interpretation
+:-----------------------|:----------------------
+0.90 to 1.00 (-0.90 to -1.00) | Very strong positive (negative) correlation
+0.70 to 0.90 (-0.70 to -0.90) | Strong positive (negative) correlation
+0.50 to 0.70 (-0.50 to -0.70) | Moderate positive (negative) correlation
+0.30 to 0.50 (-0.30 to -0.50) | Weak positive (negative) correlation
+0.00 to 0.30 (0.00 to -0.30) | Very weak positive (negative) correlation
+
+**Note**: the `cor` function can also be used to compute the correlation coefficient. For more details type `?cor` into the R console.
+
+The next step in our exploratory data analysis is to visualise the data using appropriate plotting techniques. Here, a scatterplot is appropriate since both `score` and `bty_avg` are numerical variables:
+
+```{r correlation4, echo = TRUE, eval = FALSE}
+ggplot(evals.scores, aes(x = bty_avg, y = score)) +
+  geom_point()
+```
+
+```{r correlationplot, echo = FALSE, eval = TRUE, warning = FALSE, out.width = '90%', fig.align = "center", fig.cap = "Figure 2: Relationship between teaching and beauty scores."}
+ggplot(evals.scores, aes(x = bty_avg, y = score)) +
+  geom_point() +
+  labs(x = "Beauty Score", y = "Teaching Score", 
+       title = "Relationship of teaching and beauty scores")
+```
+
+<br>
+
+**Task**: Update the above code to give the plot more appropriate axes labels and a title similar to the scatterplot above.
+
+`r hide("Hint")`
+You need to include the `labs` layer and provide it with the `x`, `y` and `title` arguments.
+**Note**: the outcome variable should always be plotted on the y-axis.
+`r unhide()`
+
+```{r Task3-solution, webex.hide="Solution", echo=TRUE, eval=TRUE}
+ggplot(evals.scores, aes(x = bty_avg, y = score)) +
+  geom_point() +
+  labs(x = "Beauty Score", y = "Teaching Score", 
+       title = "Relationship of teaching and beauty scores")
+```
+
+<br>
+
+What can we observe from the scatterplot? Well, here it can be hard to see the weakly positive linear relationship suggested by the correlation coefficient (0.187), which is why our correlation coefficient is considered *very weak* in the verbal interpretation.
+
+Additionally, as our numerical variables are averages of integers (or whole numbers), a lot of the values will be plotted on top of one another. Remember, from Week 1, that this is referred to as **over-plotting**, and can be alleviated by slightly nudging (**jittering**) the points in a random direction. For example, let's look at the three points in the top-right of the scatterplot that have a beauty score slightly less than 8. Are there really only three values plotted there, or are there more that we cannot see due to over-plotting? Let's find out by adding some jitter to the plot: 
+
+```{r correlation5, echo = FALSE, eval = TRUE, warning = FALSE, fig.width = 8, fig.align = "center", fig.cap = "Figure 3: Comparing regular and jittered scatterplots."}
+box <- data_frame(x=c(7.6, 8, 8, 7.6, 7.6), y=c(4.75, 4.75, 5.1, 5.1, 4.75))
+p1 <- ggplot(evals.scores, aes(x = bty_avg, y = score)) +
+  geom_point() +
+  labs(x = "Beauty Score", y = "Teaching Score",
+       title = "Regular scatterplot") +
+  geom_path(data = box, aes(x=x, y=y), col = "red", size = 1)
+set.seed(76)
+p2 <- ggplot(evals.scores, aes(x = bty_avg, y = score)) +
+  geom_jitter() +
+  labs(x = "Beauty Score", y = "Teaching Score",
+       title = "Jittered scatterplot") +
+  geom_path(data = box, aes(x=x, y=y), col = "red", size = 1)
+grid.arrange(p1, p2, ncol=2)
+```
+
+From the jittered scatterplot we can see that:
+
+1. There are actually more than just three points plotted in the top-right; and
+2. There are more instructors with a beauty score between 3 and 4.5 than originally appears due to over-plotting.
+
+**Note**: jittering does not actually change the values within a data set, it is merely a tool for visualisation purposes. Hence, we shall continue on with plotting the original data.
+
+<br>
+<br>
+
+
+## Formal analysis {-}
+
+After completing an exploratory data analysis the next step is to perform a **formal analysis** on the data. This involves constructing an appropriate statistical model from the information gathered during the exploratory data analysis step. Here, we shall be fitting a simple linear regression model to the data on teaching and beauty scores, where our objective is to acquire the best fitting regression line. This is done by finding estimates of the intercept ($\alpha$) and slope ($\beta$) which give us the best-fitting line to the data. This can be done in R using the `lm` function to fit a linear model to the data as follows:
+
+```{r lm, echo = TRUE, eval = TRUE, warning = FALSE}
+model <- lm(score ~ bty_avg, data = evals.scores)
+model
+```
+
+This tells us that our best-fitting line to the data is:
+
+$$\widehat{\mbox{score}} = \widehat{\alpha} + \widehat{\beta} x_i = `r round(model$coefficients[1],3)`  + `r round(model$coefficients[2],3)` \cdot \mbox{bty_avg}$$
+
+where
+
+  * $\widehat{\alpha} = `r model$coefficients[1]`$ is the intercept coefficient and means that, for any instructor with a `bty_avg = 0`, their average teaching `score` would be 3.8803. Note that `bty_avg = 0` is not actually possible as  `bty_avg` is an average of beauty scores ranging between 1 and 10.
+  * $\widehat{\beta} = `r model$coefficients[2]`$ is the slope coefficient associated with the exploratory variable `bty_avg`, and summarises the relationship between `score` and `bty_avg`. That is, as `bty_avg` increases, so does `score`, such that
+    * For every 1 unit increase in `bty_avg`, there is an associated increase of, on average, `r round(model$coefficients[2],3)` units of `score`.
+
+Finally, we can superimpose our best-fitting line onto our scatterplot to see how it fits through the points using the `geom_smooth` function as follows:
+
+```{r lm2, echo = TRUE, eval = TRUE, warning = FALSE, out.width = '90%', fig.align = "center", fig.cap = "Figure 4: Relationship between teaching and beauty scores with regression line superimposed."}
+ggplot(evals.scores, aes(x = bty_avg, y = score)) +
+  geom_point() +
+  labs(x = "Beauty Score", y = "Teaching Score", 
+       title = "Relationship of teaching and beauty scores") +
+  geom_smooth(method = "lm", se = FALSE)
+```
+
+Now that we have fitted our simple linear regression model to the data, how do we use it to obtain information on individual data points? This can be done by looking at the **fitted values**. For example, let's say we are interested in looking at the 21st instructor who has the following teaching and beauty scores:
+
+| `score`| `bty_avg`|
+|-----:|-------:|
+|   4.9|   7.33|
+
+What would the `score` be on our best-fitting line for this instructor with a `bty_avg` of 7.33? We simply plug the instructor's `bty_avg` into our regression model:
+
+$$\widehat{\mbox{score}} = 3.88034 + 0.06664 \cdot \mbox{bty_avg} = 3.88034 + 0.06664 \cdot 7.33 = 4.369,$$
+The regression model gives our instructor a `score` of 4.369. However, we know the `score` of the instructor is 4.9 meaning that our model was out by 0.531. This is known as the **residual** ($\epsilon$) and can be thought of as the error or *lack of fit* of the regression line. In this case, the residual is given by:
+
+$$ \widehat{\epsilon} = y - \widehat{y} = 4.9 - 4.369 = 0.531.$$
+This is essentially the distance between the fitted regression line and the observed (true) value. This can be seen on the following scatterplot:
+
+```{r lm3, echo = FALSE, eval = TRUE, warning = FALSE, out.width = '90%', fig.align = "center", fig.cap = "Figure 5: Example of observed value, fitted value, and residual."}
+index <- which(evals.scores$bty_avg == 7.333 & evals.scores$score == 4.9)
+target_point <- model %>%
+  get_regression_points() %>%
+  slice(index)
+x <- target_point$bty_avg
+y <- target_point$score
+y_hat <- target_point$score_hat
+resid <- target_point$residual
+
+ggplot(evals.scores, aes(x = bty_avg, y = score)) +
+  geom_point() +
+  labs(x = "Beauty Score", y = "Teaching Score", 
+       title = "Relationship of teaching and beauty scores") + 
+  geom_smooth(method = "lm", se = FALSE) +
+  annotate("point", x = x, y = y, col = "red", size = 3) +
+  annotate("point", x = x, y = y_hat, col = "red", shape = 15, size = 3) +
+  annotate("segment", x = x, xend = x, y = y, yend = y_hat, color = "blue",
+           arrow = arrow(type = "closed", length = unit(0.02, "npc")))
+```
+
+where
+
+  * the red circle is the observed (true) `score` ($y=4.9$) of the instructor;
+  * the red square is the fitted value ($\widehat{y} = 4.369$) from the regression line; and
+  * the blue arrow is the distance between the observed and fitted values, that is, the residual.
+
+<br>
+
+**Task**: Obtain the observed `score` and `bty_avg` for the 27th instructor.
+
+`r hide("Hint")`
+Pick out the 27th row of the `evals.scores` data set.
+`r unhide()`
+
+```{r Task4-solution, webex.hide="Solution", echo=TRUE, eval=TRUE}
+evals.scores[27, ]
+```
+
+<br>
+
+```{r MCQ6}
+opts_Q6 <- sample(c("4.6",
+                    answer = "4.1",
+                    "3.2",
+                    "3.9"))
+```
+
+**Using the regression model, find the fitted value of `score` for the 13th instructor?**
+`r longmcq(opts_Q6)`
+
+<br>
+
+```{r MCQ7}
+opts_Q7 <- sample(c("0.41",
+                    answer = "0.35",
+                    "0.28",
+                    "0.31"))
+```
+
+**Using the regression model, find the value of the `residual` error for the 56th instructor?**
+`r longmcq(opts_Q7)`
+
+<br>
+
+To obtain the fitted values and residuals for all instructors within the data set we can use the `get_regression_points` function:
+
+```{r lm4, echo = TRUE, eval = TRUE, warning = FALSE}
+regression.points <- get_regression_points(model)
+regression.points
+```
+
+The table provides us with information on the:
+
+  * `score`: the observed value of the outcome variable $y$;
+  * `bty_avg`: the values of the explanatory variable $x$;
+  * `score_hat`: the values of the fitted values $\widehat{y}$; and
+  * `residual`: the residuals $y - \widehat{y}$.
+  
+```{r MCQ8}
+opts_Q8 <- sample(c("4.3",
+                    answer = "4.2",
+                    "3.9",
+                    "3.7"))
+```
+
+<br>
+
+**Using the table above, find the fitted value of `score` for the 72nd instructor?**
+`r longmcq(opts_Q8)`
+
+<br>
+
+```{r MCQ9}
+opts_Q9 <- sample(c("0.66",
+                    answer = "0.61",
+                    "0.59",
+                    "0.55"))
+```
+
+**Using the table above, find the value of the `residual` error for the 44th instructor?**
+`r longmcq(opts_Q9)`
+
+<br>
+
+## Assessing model fit {-}
+
+When we fit a simple linear regression model there are five main assumptions that we need to hold true in order for the model to be an appropriate fit to the data. These assumptions are:
+
+1. The deterministic part of the model captures all the non-random structure in the data, i.e.\ the residuals have mean zero.
+2. The scale of the variability of the residuals is constant at all values of the explanatory variables.
+3. The residuals are normally distributed.
+4. The residuals are independent.
+5. The values of the explanatory variables are recorded without error.
+
+One way we can check our first assumption is to plot the residuals (`residuals`) against the explanatory variable (`bty_avg`). From this we should be able to check that the explanatory variable has a linear relationship with the outcome variable (`score`). We can plot the residuals against our explanatory variable using:
+
+```{r lm6, echo = TRUE, eval = TRUE, warning = FALSE, out.width = '90%', fig.align = "center", fig.cap = "Figure 6: Residuals against beauty score."}
+ggplot(regression.points, aes(x = bty_avg, y = residual)) +
+  geom_point() +
+  labs(x = "Beauty Score", y = "Residual") +
+  geom_hline(yintercept = 0, col = "blue", size = 1)
+```
+
+Ideally, for the first assumption to hold we should observe the following:
+
+  * There should be no systematic pattern, i.e.\ the residuals should appear randomly scattered.
+  * The residuals should have mean zero. That is, they should be evenly scattered above and below the zero line. This is because the regression model will overestimate some of the fitted values, but it will also underestimate some, and hence, on average, they should even out to have mean zero.
+
+```{r MCQ10}
+opts_Q10 <- c(answer = "Yes",
+              "No")
+```
+
+<br>
+
+**Does the first assumption appear to hold from the scatterplot of the residuals against the explanatory variable?**
+`r longmcq(opts_Q10)`
+
+<br>
+
+We can examine our first two assumptions by also plotting the residuals against the fitted values as follows:
+
+```{r lm7, echo = TRUE, eval = TRUE, warning = FALSE, out.width = '90%', fig.align = "center", fig.cap = "Figure 7: Residuals against fitted values."}
+ggplot(regression.points, aes(x = score_hat, y = residual)) +
+  geom_point() +
+  labs(x = "Fitted values", y = "Residual") +
+  geom_hline(yintercept = 0, col = "blue", size = 1)
+```
+
+From the plot of the residuals against the fitted values we want to examine whether:
+
+  * The residuals have mean zero.
+  * If the residuals have constant variance across all levels of the fitted values. That is, the range (or spread) of the residuals should be similar across all levels of the fitted values and display no obvious changes in variability.
+  
+```{r MCQ11}
+opts_Q11 <- c(answer = "Yes",
+              "No")
+```
+
+<br>
+
+**Do assumptions 1. and 2. appear to hold from the plot of the residuals against the fitted values?**
+`r longmcq(opts_Q11)`
+
+<br>
+
+**Task**: Examine the following residual plots before answering the questions below. 
+
+```{r lm8, echo = FALSE, eval = TRUE, warning = FALSE, fig.width = 10, fig.align = "center", fig.cap = "Figure 8: Examples of different residual patterns."}
+resid_ex <- evals.scores
+resid_ex$ex_1 <- ((evals.scores$bty_avg - 5) ^ 2 - 6 + rnorm(nrow(evals.scores), 0, 0.5)) * 0.4
+resid_ex$ex_2 <- (rnorm(nrow(evals.scores), 0, 0.075 * evals.scores$bty_avg ^ 2)) * 0.4
+  
+resid_ex <- resid_ex %>%
+  select(bty_avg, ex_1, ex_2) %>%
+  gather(type, eps, -bty_avg) %>% 
+  mutate(type = ifelse(type == "ex_1", "Example 1", "Example 2"))
+
+ggplot(resid_ex, aes(x = bty_avg, y = eps)) +
+  geom_point() +
+  labs(x = "x", y = "Residual") +
+  geom_hline(yintercept = 0, col = "blue", size = 1) +
+  facet_wrap(~type)
+```
+
+```{r MCQ12}
+opts_Q12 <- c("Yes",
+              answer = "No")
+```
+
+<br>
+
+**Do the assumptions hold for Example 1?**
+`r longmcq(opts_Q12)`
+
+<br>
+
+```{r MCQ13}
+opts_Q13 <- c("Yes",
+              answer = "No")
+```
+
+**Do the assumptions hold for Example 2?**
+`r longmcq(opts_Q13)`
+
+<br>
+
+To assess our third assumption that the residuals are normally distributed we can simply plot a histogram of the residuals:
+
+```{r lm9, echo = TRUE, eval = TRUE, warning = FALSE, out.width = '90%', fig.align = "center", fig.cap = "Figure 9: Histogram of residuals."}
+ggplot(regression.points, aes(x = residual)) +
+  geom_histogram(binwidth = 0.25, color = "white") +
+  labs(x = "Residual")
+```
+
+Ideally, for the assumption of normally distributed residuals, the histogram should be bell-shaped and centred at zero, i.e.\ the residuals have mean zero. However, in practice this will almost never be the case, and as such, like the plots of the residuals, there is some subjectivity in whether you believe the assumptions hold. For instance, here we can see that the histogram is slightly skewed to the left in that the distribution has a longer tail to the left. However, in my opinion, this is not of much concern as the histogram appears to be relatively symmetrical and bell-shaped, and as such the assumption of normally distributed random errors appears valid in this case.  
+
+Finally, assumptions 4.\ and 5.\ are often justified on the basis of the experimental context and are not formally examined.
+
+<br>
+<br>
+

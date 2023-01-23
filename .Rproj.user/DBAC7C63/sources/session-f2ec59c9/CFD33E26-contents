@@ -1,0 +1,25 @@
+# Simple linear regression {-}
+
+For a response variable $y$ and an explanatory variable $x$, the data can be expressed as:
+
+$$(y_i, x_i), ~~~~ i = 1,\ldots,n.$$
+That is, we have $n$ observations of $y$ and $x$. A statistical model is a mathematical statement describing the variability in a random variable $y$, which includes any relationship with the explanatory variable $x$. The inclusion of random (unpredictable) components $\epsilon$, makes the model statistical, rather than deterministic. A simple linear regression model involves, as the name suggests, fitting a linear regression line to the data. Hence, a simple linear regression model can be written as follows:
+
+$$y_i = \alpha + \beta x_i + \epsilon_i, ~~~~ \epsilon_i \sim N(0, \sigma^2),$$
+where
+
+  * $y_i$ is the $i^{th}$ observation of the response variable;
+  * $\alpha$ is the **intercept** of the regression line;
+  * $\beta$ is the **slope** of the regression line;
+  * $x_i$ is the $i^{th}$ observation of the explanatory variable; and
+  * $\epsilon_i$ is the $i^{th}$ random component.
+
+The random components, $\epsilon_i$, are normally distributed with mean zero and constant variance $\sigma^2$, such that we are essentially adding random white noise to the deterministic part of the model ($\alpha + \beta x_i$). Thus, the full probability model for $y_i$ given $x_i$ ($y_i | x_i$) can be written as
+
+$$y_i | x_i \sim N(\alpha + \beta x_i, \sigma^2).$$
+
+Hence, the mean comes from the deterministic part of the model, while the variance comes from the random part. We shall now look into fitting a simple linear regression model to some data.
+
+
+<br>
+<br>

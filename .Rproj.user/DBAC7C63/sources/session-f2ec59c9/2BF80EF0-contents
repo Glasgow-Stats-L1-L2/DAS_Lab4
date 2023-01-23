@@ -1,0 +1,308 @@
+# Regression modelling with two continuous explanatory variables {-}
+
+Let's start by fitting a regression model with two continuous explanatory variables. We shall examine a data set within the `ISLR` package, which is an accompanying R package related to the textbook [An Introduction to Statistical Learning with Applications in R](http://www-bcf.usc.edu/~gareth/ISL/). We will take a look at the `Credit` data set, which consists of predictions made on the credit card balance of 400 individuals, where the predictions are based on information relating to income, credit limit and the level of education of an individual.
+
+**Note**: This is a simulated data set and is not based on credit card balances of actual individuals.
+
+The regression model we will be considering contains the following variables:
+
+  * the continuous outcome variable $y$, the credit card balance of an individual; and
+  * two explanatory variables $x_1$ and $x_2$, which are an individual's credit limit and income (both in thousands of dollars), respectively.
+
+
+## Exploratory data analysis {-}
+
+**Task**: Start by subsetting the `Credit` data set so that we only have the variables we are interested in, that is, `Balance`, `Limit` and `Income`. Note, it is best to give your new data set a different name than Credit as to not overwrite the original `Credit` data set.
+
+```{r Task6-solution, webex.hide="Solution", echo=TRUE, eval=TRUE}
+Cred <- Credit %>%
+  select(Balance, Limit, Income)
+```
+
+<br>
+
+Your new data set should look like the one below.
+
+```{r subset2, echo = FALSE, eval = TRUE, warning = FALSE}
+head(Cred)
+```
+
+We can also use the `glimpse` function to take a look at our new data set (named `Cred` in this case):
+
+```{r glimpse, echo = TRUE, eval = TRUE, warning = FALSE}
+glimpse(Cred)
+```
+
+**Note**: the `View` function can also be used within RStudio to examine a spreadsheet of the data.
+
+Now, let's take a look at summary statistics relating to our data set using the `skim` function:
+
+```{r skim, echo = TRUE, eval = TRUE, warning = FALSE}
+Cred %>%
+  skim()
+```
+
+<br>
+
+```{r MCQ32}
+opts_Q32 <- sample(c("$4622.50",
+                     answer = "$4735.60",
+                     "$2308.20",
+                     "$5872.75"))
+```
+
+**What is the mean credit limit?**
+`r longmcq(opts_Q32)`
+
+<br>
+
+```{r MCQ33}
+opts_Q33 <- sample(c("$520.01",
+                     answer = "$459.50",
+                     "$459.76",
+                     "$863.00"))
+```
+
+**What is the median credit balance?**
+`r longmcq(opts_Q33)`
+
+<br>
+
+```{r MCQ34}
+opts_Q34 <- c(answer = "25%",
+              "50%",
+              "75%",
+              "100%")
+```
+
+**What percentage of credit card holders have an income greater than $57,470?**
+`r longmcq(opts_Q34)`
+
+<br>
+
+Now that we are looking at the relationship between an outcome variable and multiple explanatory variables, we need to examine the correlation between each of them. We can examine the correlation between `Balance`, `Limit` and `Income` by creating a table of correlations as follows:
+
+```{r cor, echo = TRUE, eval = TRUE, warning = FALSE}
+Cred %>%
+  cor()
+```
+
+<br>
+
+```{r MCQ35}
+opts_Q35 <- sample(c("1.000",
+                     answer = "0.862",
+                     "0.792",
+                     "0.464"))
+```
+
+**What is the correlation coefficient for the linear relationship between `Balance` and `Limit`?**
+`r longmcq(opts_Q35)`
+
+<br>
+
+```{r MCQ36}
+opts_Q36 <- sample(c("Strongly positive",
+                     answer = "Weakly positive",
+                     "Moderately positive",
+                     "Weakly negative"))
+```
+
+**What would be the verbal interpretation of the correlation coefficient for the linear relationship between `Balance` and `Income`?**
+`r longmcq(opts_Q36)`
+
+<br>
+
+**Question**: Why are the diagonal components of our correlation table all equal to 1?
+
+From our correlation table we can see that the correlation between our two explanatory variables is 0.792, which is a strong positive linear relationship. Hence, we say there is a high degree of *collinearity* between our explanatory variables.
+
+**Collinearity** (or **multicollinearity**) occurs when an explanatory variable within a multiple regression model can be linearly predicted from the other explanatory variables with a high level of accuracy. For example, in this case, since `Limit` and `Income` are highly correlated, we could take a good guess as to an individual's `Income` based on their `Limit`. That is, having one or more highly correlated explanatory variables within a multiple regression model essentially provides us with redundant information. Normally, we would remove one of the highly correlated explanatory variables, however, for the purpose of this example we shall ignore the potential issue of collinearity and carry on. You may want to use the `pairs` function or the `ggpairs` function from the `GGally` package to look at potential relationships between all of the variables within a data set.
+
+Let's now produce scatterplots of the relationship between the outcome variable and the explanatory variables. First, we shall look at the scatterplot of `Balance` against `Limit`:
+
+```{r scat1, echo = TRUE, eval = TRUE, warning = FALSE, message=FALSE, out.width = '90%', fig.align = "center", fig.cap = "Figure 1: Relationship between balance and credit limit."}
+ggplot(Cred, aes(x = Limit, y = Balance)) +
+  geom_point() +
+  labs(x = "Credit limit (in $)", y = "Credit card balance (in $)", 
+       title = "Relationship between balance and credit limit") +
+  geom_smooth(method = "lm", se = FALSE)
+```
+
+<br>
+
+```{r MCQ37}
+opts_Q37 <- sample(c("Negative",
+                     answer = "Positive",
+                     "None"))
+```
+
+**What is the relationship between balance and credit limit?**
+`r longmcq(opts_Q37)`
+
+<br>
+
+Now, let's look at a scatterplot of `Balance` and `Income`: 
+
+```{r scat2, echo = TRUE, eval = TRUE, warning = FALSE, message=FALSE, out.width = '90%', fig.align = "center", fig.cap = "Figure 2: Relationship between balance and income."}
+ggplot(Cred, aes(x = Income, y = Balance)) +
+  geom_point() +
+  labs(x = "Income (in $1000)", y = "Credit card balance (in $)", 
+       title = "Relationship between balance and income") +
+  geom_smooth(method = "lm", se = FALSE)
+```
+
+<br>
+
+```{r MCQ38}
+opts_Q38 <- sample(c("Negative",
+                     answer = "Positive",
+                     "None"))
+```
+
+**What is the relationship between balance and income?**
+`r longmcq(opts_Q38)`
+
+<br>
+
+The two scatterplots above focus on the relationship between the outcome variable `Balance` and each of the explanatory variables independently. In order to get an idea of the relationship between all three variables we can use the `plot_ly` function within the `plotly` library to plot a 3-dimensional scatterplot as follows (you may need to hover over/click on the area below for the plot to appear):
+
+```{r scat3d, echo = TRUE, eval = TRUE, warning = FALSE, out.width = '100%', fig.align = "center", fig.cap = "Figure 3: 3D scatterplot of balance, credit limit, and income."}
+plot_ly(Cred, x = ~Income, y = ~Limit, z = ~Balance,
+        type = "scatter3d", mode = "markers")
+```
+
+Click on and drag Figure 3 to change the viewing perspective. Is it reasonable to think about the points being randomly scattered around a two dimensional *plane*?
+
+In Week 3, when we fitted a regression model with one continuous explanatory variable, we were looking at the *best-fitting line*. However, now that we have more than one explanatory variable, we are looking at the *best-fitting plane*, which is a 3-dimensional generalisation of the best-fitting line.  
+
+## Formal analysis {-}
+
+The multiple regression model we will be fitting to the credit balance data is given as:
+
+$$y_i = \alpha + \beta_1 x_{1i} + \beta_2 x_{2i} + \epsilon_i, ~~~~ \epsilon \sim N(0, \sigma^2),$$
+
+where
+
+  * $y_i$ is the credit balance of the $i^{th}$ individual;
+  * $\alpha$ is the intercept and positions the best-fitting plane in 3D space;
+  * $\beta_1$ is the coefficient for the first explanatory variable $x_1$;
+  * $\beta_2$ is the coefficient for the second explanatory variable $x_2$; and
+  * $\epsilon_i$ is the $i^{th}$ random error component.
+
+Similarly to Week 3, we use the `lm` function to fit the regression model and the `get_regression_table` function to view our parameter estimates:
+
+```{r mod, echo = TRUE, eval = TRUE, warning = FALSE}
+Balance.model <- lm(Balance ~ Limit + Income, data = Cred)
+get_regression_table(Balance.model)
+```
+
+**Notes**
+
+* To include multiple explanatory variables within a regression model we simply use the `+` sign, that is `Balance ~ Limit + Income`.
+
+* An alternative to `get_regression_table` is the `summ` function in the `jtools` [package](https://cran.r-project.org/web/packages/jtools/vignettes/summ.html) which allows a lot more control over what is included in the summary table.  Here is the default output... 
+
+```{r mod2, echo = TRUE, eval = TRUE, warning = FALSE}
+summ(par.model)
+```
+
+How do we interpret our model estimates defining the regression plane? They can be interpreted as follows:
+
+  * The **intercept** represents the credit card balance (`Balance`) of an individual who has \$0 for both credit limit (`Limit`) and income (`Income`). However, this interpretation, though technically correct, is nonsensical in this context as there are no credit cards with \$0 credit limit and no people with an income of \$0 in the data set.  In contexts where the intercept term does not have a meaningful interpretation, we think of it as a value that positions the fitted model with no intuitive meaning.
+  * The coefficient for credit limit (`Limit`) tells us that, *taking all other variables in the model into account and holding them constant*, there is an associated **increase**, on average, in credit card balance of \$0.26 for every \$1 increase in credit limit.
+  * Similarly, the coefficient for income (`Income`) tells us that, *taking all other variables in the model into account and holding them constant*, there is an associated **decrease**, on average, in credit card balance of \$7.66 for every \$1 increase in income.
+
+What do you notice that is strange about our coefficient estimates given our exploratory data analysis? 
+
+Well, from our scatterplots of credit card balance against both credit limit and income, we saw that there appeared to be a positive linear relationship. Why do we then get a negative coefficient for income (-7.66)? This is due to a phenomenon known as **Simpson's Paradox**. This occurs when there are trends within different categories (or groups) of data, but that these trends disappear when the categories are grouped as a whole. For more details see [Section 7.3.2 of An Introduction to Statistical and Data Sciences in R](https://moderndive.com/7-multiple-regression.html#simpsonsparadox).
+
+
+## Assessing model fit {-}
+
+Now we need to assess our model assumptions. As a reminder, our model assumptions are:
+
+1. The deterministic part of the model captures all the non-random structure in the data, i.e.\ the residuals have mean zero.
+2. The scale of the variability of the residuals is constant at all values of the explanatory variables.
+3. The residuals are normally distributed.
+4. The residuals are independent.
+5. The values of the explanatory variables are recorded without error.
+
+First, we need to obtain the fitted values and residuals from our regression model:
+
+```{r assess, echo = c(1), eval = TRUE, warning = FALSE}
+regression.points <- get_regression_points(Balance.model)
+regression.points
+```
+
+Recall that `get_regression_points` provides us with values of the:
+
+  * outcome variable $y$ (`Balance`);
+  * explanatory variables $x_1$ (`Limit`) and $x_2$ (`Income`);
+  * fitted values $\widehat{y}$; and
+  * the residual error ($y - \widehat{y}$).
+  
+We can assess our first two model assumptions by producing scatterplots of our residuals against each of our explanatory variables. First, let's begin with the scatterplot of the residuals against credit limit:
+
+```{r residplots1, echo = TRUE, eval = TRUE, warning = FALSE, out.width = '90%', fig.align = "center", fig.cap = "Figure 4: Residuals vs credit limit."}
+ggplot(regression.points, aes(x = Limit, y = residual)) +
+  geom_point() +
+  labs(x = "Credit limit (in $)", y = "Residual", title = "Residuals vs credit limit")  +
+  geom_hline(yintercept = 0, col = "blue", size = 1)
+```  
+
+<br>
+
+```{r MCQ39}
+opts_Q39 <- c("Yes",
+              answer = "No")
+```
+
+**Do the first two model assumptions appear to hold from the scatterplot of the residuals against credit limit?**
+`r longmcq(opts_Q39)`
+
+<br>
+
+Now, let's plot a scatterplot of the residuals against income:
+
+```{r residplots2, echo = TRUE, eval = TRUE, warning = FALSE, out.width = '90%', fig.align = "center", fig.cap = "Figure 5: Residuals vs income."}
+ggplot(regression.points, aes(x = Income, y = residual)) +
+  geom_point() +
+  labs(x = "Income (in $1000)", y = "Residual", title = "Residuals vs income") +
+  geom_hline(yintercept = 0, col = "blue", size = 1)
+```
+
+<br>
+
+```{r MCQ40}
+opts_Q40 <- c("Yes",
+              answer = "No")
+```
+
+**Do the first two model assumptions appear to hold from the scatterplot of the residuals against income?**
+`r longmcq(opts_Q40)`
+
+<br>
+
+Finally, we can check if the residuals are normally distributed by producing a histogram:
+
+```{r residhist, echo = TRUE, eval = TRUE, warning = FALSE, out.width = '90%', fig.align = "center", fig.cap = "Figure 6: Histogram of the residuals."}
+ggplot(regression.points, aes(x = residual)) +
+  geom_histogram(color = "white") +
+  labs(x = "Residual")
+```
+
+<br>
+
+```{r MCQ41}
+opts_Q41 <- c("Yes",
+              answer = "No")
+```
+
+**Do the residuals appear to be normally distributed and centred at zero?**
+`r longmcq(opts_Q41)`
+
+<br>
+<br>
+
+

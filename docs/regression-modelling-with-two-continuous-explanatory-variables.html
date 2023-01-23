@@ -1,0 +1,918 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Regression modelling with two continuous explanatory variables | Data Analysis: Regression Modelling</title>
+  <meta name="description" content="Regression modelling with two continuous explanatory variables | Data Analysis: Regression Modelling" />
+  <meta name="generator" content="bookdown 0.28 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Regression modelling with two continuous explanatory variables | Data Analysis: Regression Modelling" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Regression modelling with two continuous explanatory variables | Data Analysis: Regression Modelling" />
+  
+  
+  
+
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="multiple-linear-regression.html"/>
+<link rel="next" href="regression-modelling-with-one-continuous-and-one-categorical-explanatory-variable.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<script src="libs/htmlwidgets-1.5.4/htmlwidgets.js"></script>
+<script src="libs/plotly-binding-4.10.0/plotly.js"></script>
+<script src="libs/typedarray-0.1/typedarray.min.js"></script>
+<link href="libs/crosstalk-1.2.0/css/crosstalk.min.css" rel="stylesheet" />
+<script src="libs/crosstalk-1.2.0/js/crosstalk.min.js"></script>
+<link href="libs/plotly-htmlwidgets-css-2.5.1/plotly-htmlwidgets.css" rel="stylesheet" />
+<script src="libs/plotly-main-2.5.1/plotly-latest.min.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+<link rel="stylesheet" href="include/webex.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Introduction</a></li>
+<li class="chapter" data-level="" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html"><i class="fa fa-check"></i>Simple linear regression</a></li>
+<li class="chapter" data-level="" data-path="simple-linear-regression-with-one-numerical-explanatory-variable.html"><a href="simple-linear-regression-with-one-numerical-explanatory-variable.html"><i class="fa fa-check"></i>Simple linear regression with one numerical explanatory variable</a>
+<ul>
+<li class="chapter" data-level="" data-path="simple-linear-regression-with-one-numerical-explanatory-variable.html"><a href="simple-linear-regression-with-one-numerical-explanatory-variable.html#exploratory-data-analysis"><i class="fa fa-check"></i>Exploratory data analysis</a></li>
+<li class="chapter" data-level="" data-path="simple-linear-regression-with-one-numerical-explanatory-variable.html"><a href="simple-linear-regression-with-one-numerical-explanatory-variable.html#correlation"><i class="fa fa-check"></i>Correlation</a></li>
+<li class="chapter" data-level="" data-path="simple-linear-regression-with-one-numerical-explanatory-variable.html"><a href="simple-linear-regression-with-one-numerical-explanatory-variable.html#formal-analysis"><i class="fa fa-check"></i>Formal analysis</a></li>
+<li class="chapter" data-level="" data-path="simple-linear-regression-with-one-numerical-explanatory-variable.html"><a href="simple-linear-regression-with-one-numerical-explanatory-variable.html#assessing-model-fit"><i class="fa fa-check"></i>Assessing model fit</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="simple-linear-regression-with-one-categorical-explanatory-variable.html"><a href="simple-linear-regression-with-one-categorical-explanatory-variable.html"><i class="fa fa-check"></i>Simple linear regression with one categorical explanatory variable</a>
+<ul>
+<li class="chapter" data-level="" data-path="simple-linear-regression-with-one-categorical-explanatory-variable.html"><a href="simple-linear-regression-with-one-categorical-explanatory-variable.html#exploratory-data-analysis-1"><i class="fa fa-check"></i>Exploratory data analysis</a></li>
+<li class="chapter" data-level="" data-path="simple-linear-regression-with-one-categorical-explanatory-variable.html"><a href="simple-linear-regression-with-one-categorical-explanatory-variable.html#formal-analysis-1"><i class="fa fa-check"></i>Formal analysis</a></li>
+<li class="chapter" data-level="" data-path="simple-linear-regression-with-one-categorical-explanatory-variable.html"><a href="simple-linear-regression-with-one-categorical-explanatory-variable.html#assessing-model-fit-1"><i class="fa fa-check"></i>Assessing model fit</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="further-tasks-simple-linear-regression.html"><a href="further-tasks-simple-linear-regression.html"><i class="fa fa-check"></i>Further Tasks: Simple Linear Regression</a></li>
+<li class="chapter" data-level="" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html"><i class="fa fa-check"></i>Multiple Linear Regression</a></li>
+<li class="chapter" data-level="" data-path="regression-modelling-with-two-continuous-explanatory-variables.html"><a href="regression-modelling-with-two-continuous-explanatory-variables.html"><i class="fa fa-check"></i>Regression modelling with two continuous explanatory variables</a>
+<ul>
+<li class="chapter" data-level="" data-path="regression-modelling-with-two-continuous-explanatory-variables.html"><a href="regression-modelling-with-two-continuous-explanatory-variables.html#exploratory-data-analysis-2"><i class="fa fa-check"></i>Exploratory data analysis</a></li>
+<li class="chapter" data-level="" data-path="regression-modelling-with-two-continuous-explanatory-variables.html"><a href="regression-modelling-with-two-continuous-explanatory-variables.html#formal-analysis-2"><i class="fa fa-check"></i>Formal analysis</a></li>
+<li class="chapter" data-level="" data-path="regression-modelling-with-two-continuous-explanatory-variables.html"><a href="regression-modelling-with-two-continuous-explanatory-variables.html#assessing-model-fit-2"><i class="fa fa-check"></i>Assessing model fit</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="regression-modelling-with-one-continuous-and-one-categorical-explanatory-variable.html"><a href="regression-modelling-with-one-continuous-and-one-categorical-explanatory-variable.html"><i class="fa fa-check"></i>Regression modelling with one continuous and one categorical explanatory variable</a>
+<ul>
+<li class="chapter" data-level="" data-path="regression-modelling-with-one-continuous-and-one-categorical-explanatory-variable.html"><a href="regression-modelling-with-one-continuous-and-one-categorical-explanatory-variable.html#exploratory-data-analysis-3"><i class="fa fa-check"></i>Exploratory data analysis</a></li>
+<li class="chapter" data-level="" data-path="regression-modelling-with-one-continuous-and-one-categorical-explanatory-variable.html"><a href="regression-modelling-with-one-continuous-and-one-categorical-explanatory-variable.html#multiple-regression-parallel-slopes-model"><i class="fa fa-check"></i>Multiple regression: parallel slopes model</a></li>
+<li class="chapter" data-level="" data-path="regression-modelling-with-one-continuous-and-one-categorical-explanatory-variable.html"><a href="regression-modelling-with-one-continuous-and-one-categorical-explanatory-variable.html#multiple-regression-interaction-model"><i class="fa fa-check"></i>Multiple regression: interaction model</a></li>
+<li class="chapter" data-level="" data-path="regression-modelling-with-one-continuous-and-one-categorical-explanatory-variable.html"><a href="regression-modelling-with-one-continuous-and-one-categorical-explanatory-variable.html#assessing-model-fit-3"><i class="fa fa-check"></i>Assessing model fit</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="further-tasks-multiple-linear-regression.html"><a href="further-tasks-multiple-linear-regression.html"><i class="fa fa-check"></i>Further Tasks: Multiple Linear Regression</a></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Data Analysis: Regression Modelling</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="regression-modelling-with-two-continuous-explanatory-variables" class="section level1 unnumbered hasAnchor">
+<h1>Regression modelling with two continuous explanatory variables<a href="regression-modelling-with-two-continuous-explanatory-variables.html#regression-modelling-with-two-continuous-explanatory-variables" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p>Let's start by fitting a regression model with two continuous explanatory variables. We shall examine a data set within the <code>ISLR</code> package, which is an accompanying R package related to the textbook <a href="http://www-bcf.usc.edu/~gareth/ISL/">An Introduction to Statistical Learning with Applications in R</a>. We will take a look at the <code>Credit</code> data set, which consists of predictions made on the credit card balance of 400 individuals, where the predictions are based on information relating to income, credit limit and the level of education of an individual.</p>
+<p><strong>Note</strong>: This is a simulated data set and is not based on credit card balances of actual individuals.</p>
+<p>The regression model we will be considering contains the following variables:</p>
+<ul>
+<li>the continuous outcome variable <span class="math inline">\(y\)</span>, the credit card balance of an individual; and</li>
+<li>two explanatory variables <span class="math inline">\(x_1\)</span> and <span class="math inline">\(x_2\)</span>, which are an individual's credit limit and income (both in thousands of dollars), respectively.</li>
+</ul>
+<div id="exploratory-data-analysis-2" class="section level2 unnumbered hasAnchor">
+<h2>Exploratory data analysis<a href="regression-modelling-with-two-continuous-explanatory-variables.html#exploratory-data-analysis-2" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p><strong>Task</strong>: Start by subsetting the <code>Credit</code> data set so that we only have the variables we are interested in, that is, <code>Balance</code>, <code>Limit</code> and <code>Income</code>. Note, it is best to give your new data set a different name than Credit as to not overwrite the original <code>Credit</code> data set.</p>
+<div class="webex-solution">
+<button>
+Solution
+</button>
+<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="regression-modelling-with-two-continuous-explanatory-variables.html#cb43-1" aria-hidden="true" tabindex="-1"></a>Cred <span class="ot">&lt;-</span> Credit <span class="sc">%&gt;%</span></span>
+<span id="cb43-2"><a href="regression-modelling-with-two-continuous-explanatory-variables.html#cb43-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(Balance, Limit, Income)</span></code></pre></div>
+</div>
+<p><br></p>
+<p>Your new data set should look like the one below.</p>
+<pre><code>  Balance Limit  Income
+1     333  3606  14.891
+2     903  6645 106.025
+3     580  7075 104.593
+4     964  9504 148.924
+5     331  4897  55.882
+6    1151  8047  80.180</code></pre>
+<p>We can also use the <code>glimpse</code> function to take a look at our new data set (named <code>Cred</code> in this case):</p>
+<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="regression-modelling-with-two-continuous-explanatory-variables.html#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(Cred)</span></code></pre></div>
+<pre><code>Rows: 400
+Columns: 3
+$ Balance &lt;int&gt; 333, 903, 580, 964, 331, 1151, 203, 872, 279, 1350, 1407, 0, 2~
+$ Limit   &lt;int&gt; 3606, 6645, 7075, 9504, 4897, 8047, 3388, 7114, 3300, 6819, 81~
+$ Income  &lt;dbl&gt; 14.891, 106.025, 104.593, 148.924, 55.882, 80.180, 20.996, 71.~</code></pre>
+<p><strong>Note</strong>: the <code>View</code> function can also be used within RStudio to examine a spreadsheet of the data.</p>
+<p>Now, let's take a look at summary statistics relating to our data set using the <code>skim</code> function:</p>
+<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb47-1"><a href="regression-modelling-with-two-continuous-explanatory-variables.html#cb47-1" aria-hidden="true" tabindex="-1"></a>Cred <span class="sc">%&gt;%</span></span>
+<span id="cb47-2"><a href="regression-modelling-with-two-continuous-explanatory-variables.html#cb47-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">skim</span>()</span></code></pre></div>
+<table>
+<caption><span id="tab:skim">Table 3: </span>Data summary</caption>
+<tbody>
+<tr class="odd">
+<td align="left">Name</td>
+<td align="left">Piped data</td>
+</tr>
+<tr class="even">
+<td align="left">Number of rows</td>
+<td align="left">400</td>
+</tr>
+<tr class="odd">
+<td align="left">Number of columns</td>
+<td align="left">3</td>
+</tr>
+<tr class="even">
+<td align="left">_______________________</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">Column type frequency:</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">numeric</td>
+<td align="left">3</td>
+</tr>
+<tr class="odd">
+<td align="left">________________________</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">Group variables</td>
+<td align="left">None</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Variable type: numeric</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">skim_variable</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="right">mean</th>
+<th align="right">sd</th>
+<th align="right">p0</th>
+<th align="right">p25</th>
+<th align="right">p50</th>
+<th align="right">p75</th>
+<th align="right">p100</th>
+<th align="left">hist</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Balance</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">520.02</td>
+<td align="right">459.76</td>
+<td align="right">0.00</td>
+<td align="right">68.75</td>
+<td align="right">459.50</td>
+<td align="right">863.00</td>
+<td align="right">1999.00</td>
+<td align="left">▇▅▃▂▁</td>
+</tr>
+<tr class="even">
+<td align="left">Limit</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">4735.60</td>
+<td align="right">2308.20</td>
+<td align="right">855.00</td>
+<td align="right">3088.00</td>
+<td align="right">4622.50</td>
+<td align="right">5872.75</td>
+<td align="right">13913.00</td>
+<td align="left">▆▇▃▁▁</td>
+</tr>
+<tr class="odd">
+<td align="left">Income</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">45.22</td>
+<td align="right">35.24</td>
+<td align="right">10.35</td>
+<td align="right">21.01</td>
+<td align="right">33.12</td>
+<td align="right">57.47</td>
+<td align="right">186.63</td>
+<td align="left">▇▂▁▁▁</td>
+</tr>
+</tbody>
+</table>
+<p><br></p>
+<strong>What is the mean credit limit?</strong>
+<div id="radio_ZDUDEYWDHY" class="webex-radiogroup">
+<label><input type="radio" autocomplete="off" name="radio_ZDUDEYWDHY" value=""></input> <span>$2308.20</span></label><label><input type="radio" autocomplete="off" name="radio_ZDUDEYWDHY" value="answer"></input> <span>$4735.60</span></label><label><input type="radio" autocomplete="off" name="radio_ZDUDEYWDHY" value=""></input> <span>$4622.50</span></label><label><input type="radio" autocomplete="off" name="radio_ZDUDEYWDHY" value=""></input> <span>$5872.75</span></label>
+</div>
+<p><br></p>
+<strong>What is the median credit balance?</strong>
+<div id="radio_SWEVYXQGMR" class="webex-radiogroup">
+<label><input type="radio" autocomplete="off" name="radio_SWEVYXQGMR" value=""></input> <span>$863.00</span></label><label><input type="radio" autocomplete="off" name="radio_SWEVYXQGMR" value=""></input> <span>$459.76</span></label><label><input type="radio" autocomplete="off" name="radio_SWEVYXQGMR" value=""></input> <span>$520.01</span></label><label><input type="radio" autocomplete="off" name="radio_SWEVYXQGMR" value="answer"></input> <span>$459.50</span></label>
+</div>
+<p><br></p>
+<strong>What percentage of credit card holders have an income greater than $57,470?</strong>
+<div id="radio_XMIGKTRKWY" class="webex-radiogroup">
+<label><input type="radio" autocomplete="off" name="radio_XMIGKTRKWY" value="answer"></input> <span>25%</span></label><label><input type="radio" autocomplete="off" name="radio_XMIGKTRKWY" value=""></input> <span>50%</span></label><label><input type="radio" autocomplete="off" name="radio_XMIGKTRKWY" value=""></input> <span>75%</span></label><label><input type="radio" autocomplete="off" name="radio_XMIGKTRKWY" value=""></input> <span>100%</span></label>
+</div>
+<p><br></p>
+<p>Now that we are looking at the relationship between an outcome variable and multiple explanatory variables, we need to examine the correlation between each of them. We can examine the correlation between <code>Balance</code>, <code>Limit</code> and <code>Income</code> by creating a table of correlations as follows:</p>
+<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb48-1"><a href="regression-modelling-with-two-continuous-explanatory-variables.html#cb48-1" aria-hidden="true" tabindex="-1"></a>Cred <span class="sc">%&gt;%</span></span>
+<span id="cb48-2"><a href="regression-modelling-with-two-continuous-explanatory-variables.html#cb48-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cor</span>()</span></code></pre></div>
+<pre><code>          Balance     Limit    Income
+Balance 1.0000000 0.8616973 0.4636565
+Limit   0.8616973 1.0000000 0.7920883
+Income  0.4636565 0.7920883 1.0000000</code></pre>
+<p><br></p>
+<strong>What is the correlation coefficient for the linear relationship between <code>Balance</code> and <code>Limit</code>?</strong>
+<div id="radio_FYDYWCZPLW" class="webex-radiogroup">
+<label><input type="radio" autocomplete="off" name="radio_FYDYWCZPLW" value=""></input> <span>0.464</span></label><label><input type="radio" autocomplete="off" name="radio_FYDYWCZPLW" value="answer"></input> <span>0.862</span></label><label><input type="radio" autocomplete="off" name="radio_FYDYWCZPLW" value=""></input> <span>0.792</span></label><label><input type="radio" autocomplete="off" name="radio_FYDYWCZPLW" value=""></input> <span>1.000</span></label>
+</div>
+<p><br></p>
+<strong>What would be the verbal interpretation of the correlation coefficient for the linear relationship between <code>Balance</code> and <code>Income</code>?</strong>
+<div id="radio_NSBGYLRGPB" class="webex-radiogroup">
+<label><input type="radio" autocomplete="off" name="radio_NSBGYLRGPB" value="answer"></input> <span>Weakly positive</span></label><label><input type="radio" autocomplete="off" name="radio_NSBGYLRGPB" value=""></input> <span>Moderately positive</span></label><label><input type="radio" autocomplete="off" name="radio_NSBGYLRGPB" value=""></input> <span>Weakly negative</span></label><label><input type="radio" autocomplete="off" name="radio_NSBGYLRGPB" value=""></input> <span>Strongly positive</span></label>
+</div>
+<p><br></p>
+<p><strong>Question</strong>: Why are the diagonal components of our correlation table all equal to 1?</p>
+<p>From our correlation table we can see that the correlation between our two explanatory variables is 0.792, which is a strong positive linear relationship. Hence, we say there is a high degree of <em>collinearity</em> between our explanatory variables.</p>
+<p><strong>Collinearity</strong> (or <strong>multicollinearity</strong>) occurs when an explanatory variable within a multiple regression model can be linearly predicted from the other explanatory variables with a high level of accuracy. For example, in this case, since <code>Limit</code> and <code>Income</code> are highly correlated, we could take a good guess as to an individual's <code>Income</code> based on their <code>Limit</code>. That is, having one or more highly correlated explanatory variables within a multiple regression model essentially provides us with redundant information. Normally, we would remove one of the highly correlated explanatory variables, however, for the purpose of this example we shall ignore the potential issue of collinearity and carry on. You may want to use the <code>pairs</code> function or the <code>ggpairs</code> function from the <code>GGally</code> package to look at potential relationships between all of the variables within a data set.</p>
+<p>Let's now produce scatterplots of the relationship between the outcome variable and the explanatory variables. First, we shall look at the scatterplot of <code>Balance</code> against <code>Limit</code>:</p>
+<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="regression-modelling-with-two-continuous-explanatory-variables.html#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(Cred, <span class="fu">aes</span>(<span class="at">x =</span> Limit, <span class="at">y =</span> Balance)) <span class="sc">+</span></span>
+<span id="cb50-2"><a href="regression-modelling-with-two-continuous-explanatory-variables.html#cb50-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb50-3"><a href="regression-modelling-with-two-continuous-explanatory-variables.html#cb50-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Credit limit (in $)&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Credit card balance (in $)&quot;</span>, </span>
+<span id="cb50-4"><a href="regression-modelling-with-two-continuous-explanatory-variables.html#cb50-4" aria-hidden="true" tabindex="-1"></a>       <span class="at">title =</span> <span class="st">&quot;Relationship between balance and credit limit&quot;</span>) <span class="sc">+</span></span>
+<span id="cb50-5"><a href="regression-modelling-with-two-continuous-explanatory-variables.html#cb50-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">&quot;lm&quot;</span>, <span class="at">se =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:scat1"></span>
+<img src="main_files/figure-html/scat1-1.png" alt="Relationship between balance and credit limit." width="90%" />
+<p class="caption">
+Figure 13: Relationship between balance and credit limit.
+</p>
+</div>
+<p><br></p>
+<strong>What is the relationship between balance and credit limit?</strong>
+<div id="radio_DMBQIWTITE" class="webex-radiogroup">
+<label><input type="radio" autocomplete="off" name="radio_DMBQIWTITE" value=""></input> <span>Negative</span></label><label><input type="radio" autocomplete="off" name="radio_DMBQIWTITE" value="answer"></input> <span>Positive</span></label><label><input type="radio" autocomplete="off" name="radio_DMBQIWTITE" value=""></input> <span>None</span></label>
+</div>
+<p><br></p>
+<p>Now, let's look at a scatterplot of <code>Balance</code> and <code>Income</code>:</p>
+<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb51-1"><a href="regression-modelling-with-two-continuous-explanatory-variables.html#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(Cred, <span class="fu">aes</span>(<span class="at">x =</span> Income, <span class="at">y =</span> Balance)) <span class="sc">+</span></span>
+<span id="cb51-2"><a href="regression-modelling-with-two-continuous-explanatory-variables.html#cb51-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb51-3"><a href="regression-modelling-with-two-continuous-explanatory-variables.html#cb51-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Income (in $1000)&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Credit card balance (in $)&quot;</span>, </span>
+<span id="cb51-4"><a href="regression-modelling-with-two-continuous-explanatory-variables.html#cb51-4" aria-hidden="true" tabindex="-1"></a>       <span class="at">title =</span> <span class="st">&quot;Relationship between balance and income&quot;</span>) <span class="sc">+</span></span>
+<span id="cb51-5"><a href="regression-modelling-with-two-continuous-explanatory-variables.html#cb51-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">&quot;lm&quot;</span>, <span class="at">se =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:scat2"></span>
+<img src="main_files/figure-html/scat2-1.png" alt="Relationship between balance and income." width="90%" />
+<p class="caption">
+Figure 14: Relationship between balance and income.
+</p>
+</div>
+<p><br></p>
+<strong>What is the relationship between balance and income?</strong>
+<div id="radio_PMWOFTBQAE" class="webex-radiogroup">
+<label><input type="radio" autocomplete="off" name="radio_PMWOFTBQAE" value=""></input> <span>Negative</span></label><label><input type="radio" autocomplete="off" name="radio_PMWOFTBQAE" value="answer"></input> <span>Positive</span></label><label><input type="radio" autocomplete="off" name="radio_PMWOFTBQAE" value=""></input> <span>None</span></label>
+</div>
+<p><br></p>
+<p>The two scatterplots above focus on the relationship between the outcome variable <code>Balance</code> and each of the explanatory variables independently. In order to get an idea of the relationship between all three variables we can use the <code>plot_ly</code> function within the <code>plotly</code> library to plot a 3-dimensional scatterplot as follows (you may need to hover over/click on the area below for the plot to appear):</p>
+<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb52-1"><a href="regression-modelling-with-two-continuous-explanatory-variables.html#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_ly</span>(Cred, <span class="at">x =</span> <span class="sc">~</span>Income, <span class="at">y =</span> <span class="sc">~</span>Limit, <span class="at">z =</span> <span class="sc">~</span>Balance,</span>
+<span id="cb52-2"><a href="regression-modelling-with-two-continuous-explanatory-variables.html#cb52-2" aria-hidden="true" tabindex="-1"></a>        <span class="at">type =</span> <span class="st">&quot;scatter3d&quot;</span>, <span class="at">mode =</span> <span class="st">&quot;markers&quot;</span>)</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:scat3d"></span>
+<div id="htmlwidget-8a4246978669e8a6a035" style="width:100%;height:480px;" class="plotly html-widget"></div>
+<script type="application/json" data-for="htmlwidget-8a4246978669e8a6a035">{"x":{"visdat":{"429426705700":["function () ","plotlyVisDat"]},"cur_data":"429426705700","attrs":{"429426705700":{"x":{},"y":{},"z":{},"mode":"markers","alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"scatter3d"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"scene":{"xaxis":{"title":"Income"},"yaxis":{"title":"Limit"},"zaxis":{"title":"Balance"}},"hovermode":"closest","showlegend":false},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"x":[14.891,106.025,104.593,148.924,55.882,80.18,20.996,71.408,15.125,71.061,63.095,15.045,80.616,43.682,19.144,20.089,53.598,36.496,49.57,42.079,17.7,37.348,20.103,64.027,10.742,14.09,42.471,32.793,186.634,26.813,34.142,28.941,134.181,31.367,20.15,23.35,62.413,30.007,11.795,13.647,34.95,113.659,44.158,36.929,31.861,77.38,19.531,44.646,44.522,43.479,36.362,39.705,44.205,16.304,15.333,32.916,57.1,76.273,10.354,51.872,35.51,21.238,30.682,14.132,32.164,12,113.829,11.187,27.847,49.502,24.889,58.781,22.939,23.989,16.103,33.017,30.622,20.936,110.968,15.354,27.369,53.48,23.672,19.225,43.54,152.298,55.367,11.741,15.56,59.53,20.191,48.498,30.733,16.479,38.009,14.084,14.312,26.067,36.295,83.851,21.153,17.976,68.713,146.183,15.846,12.031,16.819,39.11,107.986,13.561,34.537,28.575,46.007,69.251,16.482,40.442,35.177,91.362,27.039,23.012,27.241,148.08,62.602,11.808,29.564,27.578,26.427,57.202,123.299,18.145,23.793,10.726,23.283,21.455,34.664,44.473,54.663,36.355,21.374,107.841,39.831,91.876,103.893,19.636,17.392,19.529,17.055,23.857,15.184,13.444,63.931,35.864,41.419,92.112,55.056,19.537,31.811,56.256,42.357,53.319,12.238,31.353,63.809,13.676,76.782,25.383,35.691,29.403,27.47,27.33,34.772,36.934,76.348,14.887,121.834,30.132,24.05,22.379,28.316,58.026,10.635,46.102,58.929,80.861,158.889,30.42,36.472,23.365,83.869,58.351,55.187,124.29,28.508,130.209,30.406,23.883,93.039,50.699,27.349,10.403,23.949,73.914,21.038,68.206,57.337,10.793,23.45,10.842,51.345,151.947,24.543,29.567,39.145,39.422,34.909,41.025,15.476,12.456,10.627,38.954,44.847,98.515,33.437,27.512,121.709,15.079,59.879,66.989,69.165,69.943,33.214,25.124,15.741,11.603,69.656,10.503,42.529,60.579,26.532,27.952,29.705,15.602,20.918,58.165,22.561,34.509,19.588,36.364,15.717,22.574,10.363,28.474,72.945,85.425,36.508,58.063,25.936,15.629,41.4,33.657,67.937,180.379,10.588,29.725,27.999,40.885,88.83,29.638,25.988,39.055,15.866,44.978,30.413,16.751,30.55,163.329,23.106,41.532,128.04,54.319,53.401,36.142,63.534,49.927,14.711,18.967,18.036,60.449,16.711,10.852,26.37,24.088,51.532,140.672,42.915,27.272,65.896,55.054,20.791,24.919,21.786,31.335,59.855,44.061,82.706,24.46,45.12,75.406,14.956,75.257,33.694,23.375,27.825,92.386,115.52,14.479,52.179,68.462,18.951,27.59,16.279,25.078,27.229,182.728,31.029,17.765,125.48,49.166,41.192,94.193,20.405,12.581,62.328,21.011,24.23,24.314,32.856,12.414,41.365,149.316,27.794,13.234,14.595,10.735,48.218,30.012,21.551,160.231,13.433,48.577,30.002,61.62,104.483,41.868,12.068,180.682,34.48,39.609,30.111,12.335,53.566,53.217,26.162,64.173,128.669,113.772,61.069,23.793,89,71.682,35.61,39.116,19.782,55.412,29.4,20.974,87.625,28.144,19.349,53.308,115.123,101.788,24.824,14.292,20.088,26.4,19.253,16.529,37.878,83.948,135.118,73.327,25.974,17.316,49.794,12.096,13.364,57.872,37.728,18.701],"y":[3606,6645,7075,9504,4897,8047,3388,7114,3300,6819,8117,1311,5308,6922,3291,2525,3714,4378,6384,6626,2860,6378,2631,5179,1757,4323,3625,4534,13414,5611,5666,2733,7838,1829,2646,2558,6457,6481,3899,3461,3327,7659,4763,6257,6375,7569,5043,4431,2252,4569,5183,3969,5441,5466,1499,1786,4742,4779,3480,5294,5198,3089,1671,2998,2937,4160,9704,5099,5619,6819,3954,7402,4923,4523,5390,3180,3293,3254,6662,2101,3449,4263,4433,1433,2906,12066,6340,2271,4307,7518,5767,6040,2832,5435,3075,855,5382,3388,2963,8494,3736,2433,7582,9540,4768,3182,1337,3189,6033,3261,3271,2959,6637,6386,3326,4828,2117,9113,2161,1410,1402,8157,7056,1300,2529,2531,5533,3411,8376,3461,3821,1568,5443,5829,5835,3500,4116,3613,2073,10384,6045,6754,7416,4896,2748,4673,5110,1501,2420,886,5728,4831,2120,4612,3155,1362,4284,5521,5550,3000,4865,1705,7530,2330,5977,4527,2880,2327,2820,6179,2021,4270,4697,4745,10673,2168,2607,3965,4391,7499,3584,5180,6420,4090,11589,4442,3806,2179,7667,4411,5352,9560,3933,10088,2120,5384,7398,3977,2000,4159,5343,7333,1448,6784,5310,3878,2450,4391,4327,9156,3206,5309,4351,5245,5289,4229,2762,5395,1647,5222,5765,8760,6207,4613,7818,5673,6906,5614,4668,7555,5137,4776,4788,2278,8244,2923,4986,5149,2910,3557,3351,906,1233,6617,1787,2001,3211,2220,905,1551,2430,3202,8603,5182,6386,4221,1774,2493,2561,6196,5184,9310,4049,3536,5107,5013,4952,5833,1349,5565,3085,4866,3690,4706,5869,8732,3476,5000,6982,3063,5319,1852,8100,6396,2047,1626,1552,3098,5274,3907,3235,3665,5096,11200,2532,1389,5140,4381,2672,5051,4632,3526,4964,4970,7506,1924,3762,3874,4640,7010,4891,5429,5227,7685,9272,3907,7306,4712,1485,2586,1160,3096,3484,13913,2863,5072,10230,6662,3673,7576,4543,3976,5228,3402,4756,3409,5884,855,5303,10278,3807,3922,2955,3746,5199,1511,5380,10748,1134,5145,1561,5140,7140,4716,3873,11966,6090,2539,4336,4471,5891,4943,5101,6127,9824,6442,7871,3615,5759,8028,6135,2150,3782,5354,4840,5673,7167,1567,4941,2860,7760,8029,5495,3274,1870,5640,3683,1357,6827,7100,10578,6555,2308,1335,5758,4100,3838,4171,2525,5524],"z":[333,903,580,964,331,1151,203,872,279,1350,1407,0,204,1081,148,0,0,368,891,1048,89,968,0,411,0,671,654,467,1809,915,863,0,526,0,0,419,762,1093,531,344,50,1155,385,976,1120,997,1241,797,0,902,654,211,607,957,0,0,379,133,333,531,631,108,0,133,0,602,1388,889,822,1084,357,1103,663,601,945,29,532,145,391,0,162,99,503,0,0,1779,815,0,579,1176,1023,812,0,937,0,0,1380,155,375,1311,298,431,1587,1050,745,210,0,0,227,297,47,0,1046,768,271,510,0,1341,0,0,0,454,904,0,0,0,1404,0,1259,255,868,0,912,1018,835,8,75,187,0,1597,1425,605,669,710,68,642,805,0,0,0,581,534,156,0,0,0,429,1020,653,0,836,0,1086,0,548,570,0,0,0,1099,0,283,108,724,1573,0,0,384,453,1237,423,516,789,0,1448,450,188,0,930,126,538,1687,336,1426,0,802,749,69,0,571,829,1048,0,1411,456,638,0,1216,230,732,95,799,308,637,681,246,52,955,195,653,1246,1230,1549,573,701,1075,1032,482,156,1058,661,657,689,0,1329,191,489,443,52,163,148,0,16,856,0,0,199,0,0,98,0,132,1355,218,1048,118,0,0,0,1092,345,1050,465,133,651,549,15,942,0,772,136,436,728,1255,967,529,209,531,250,269,541,0,1298,890,0,0,0,0,863,485,159,309,481,1677,0,0,293,188,0,711,580,172,295,414,905,0,70,0,681,885,1036,844,823,843,1140,463,1142,136,0,0,5,81,265,1999,415,732,1361,984,121,846,1054,474,380,182,594,194,926,0,606,1107,320,426,204,410,633,0,907,1192,0,503,0,302,583,425,413,1405,962,0,347,611,712,382,710,578,1243,790,1264,216,345,1208,992,0,840,1003,588,1000,767,0,717,0,661,849,1352,382,0,905,371,0,1129,806,1393,721,0,0,734,560,480,138,0,966],"mode":"markers","type":"scatter3d","marker":{"color":"rgba(31,119,180,1)","line":{"color":"rgba(31,119,180,1)"}},"error_y":{"color":"rgba(31,119,180,1)"},"error_x":{"color":"rgba(31,119,180,1)"},"line":{"color":"rgba(31,119,180,1)"},"frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.2,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+<p class="caption">
+Figure 15: 3D scatterplot of balance, credit limit, and income.
+</p>
+</div>
+<p>Click on and drag Figure 3 to change the viewing perspective. Is it reasonable to think about the points being randomly scattered around a two dimensional <em>plane</em>?</p>
+<p>Before, when we fitted a regression model with one continuous explanatory variable, we were looking at the <em>best-fitting line</em>. However, now that we have more than one explanatory variable, we are looking at the <em>best-fitting plane</em>, which is a 3-dimensional generalisation of the best-fitting line.</p>
+</div>
+<div id="formal-analysis-2" class="section level2 unnumbered hasAnchor">
+<h2>Formal analysis<a href="regression-modelling-with-two-continuous-explanatory-variables.html#formal-analysis-2" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>The multiple regression model we will be fitting to the credit balance data is given as:</p>
+<p><span class="math display">\[y_i = \alpha + \beta_1 x_{1i} + \beta_2 x_{2i} + \epsilon_i, ~~~~ \epsilon \sim N(0, \sigma^2),\]</span></p>
+<p>where</p>
+<ul>
+<li><span class="math inline">\(y_i\)</span> is the credit balance of the <span class="math inline">\(i^{th}\)</span> individual;</li>
+<li><span class="math inline">\(\alpha\)</span> is the intercept and positions the best-fitting plane in 3D space;</li>
+<li><span class="math inline">\(\beta_1\)</span> is the coefficient for the first explanatory variable <span class="math inline">\(x_1\)</span>;</li>
+<li><span class="math inline">\(\beta_2\)</span> is the coefficient for the second explanatory variable <span class="math inline">\(x_2\)</span>; and</li>
+<li><span class="math inline">\(\epsilon_i\)</span> is the <span class="math inline">\(i^{th}\)</span> random error component.</li>
+</ul>
+<p>Similarly to simple linear regression, we use the <code>lm</code> function to fit the regression model and the <code>get_regression_table</code> function to view our parameter estimates:</p>
+<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb53-1"><a href="regression-modelling-with-two-continuous-explanatory-variables.html#cb53-1" aria-hidden="true" tabindex="-1"></a>Balance.model <span class="ot">&lt;-</span> <span class="fu">lm</span>(Balance <span class="sc">~</span> Limit <span class="sc">+</span> Income, <span class="at">data =</span> Cred)</span>
+<span id="cb53-2"><a href="regression-modelling-with-two-continuous-explanatory-variables.html#cb53-2" aria-hidden="true" tabindex="-1"></a><span class="fu">get_regression_table</span>(Balance.model)</span></code></pre></div>
+<pre><code># A tibble: 3 x 7
+  term      estimate std_error statistic p_value lower_ci upper_ci
+  &lt;chr&gt;        &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;
+1 intercept -385.       19.5       -19.8       0 -423.    -347.   
+2 Limit        0.264     0.006      45.0       0    0.253    0.276
+3 Income      -7.66      0.385     -19.9       0   -8.42    -6.91 </code></pre>
+<p><strong>Notes</strong></p>
+<ul>
+<li><p>To include multiple explanatory variables within a regression model we simply use the <code>+</code> sign, that is <code>Balance ~ Limit + Income</code>.</p></li>
+<li><p>An alternative to <code>get_regression_table</code> is the <code>summ</code> function in the <code>jtools</code> <a href="https://cran.r-project.org/web/packages/jtools/vignettes/summ.html">package</a> which allows a lot more control over what is included in the summary table. Here is the default output...</p></li>
+</ul>
+<div class="sourceCode" id="cb55"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb55-1"><a href="regression-modelling-with-two-continuous-explanatory-variables.html#cb55-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summ</span>(par.model)</span></code></pre></div>
+<table class="table table-striped table-hover table-condensed table-responsive" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<tbody>
+<tr>
+<td style="text-align:left;font-weight: bold;">
+Observations
+</td>
+<td style="text-align:right;">
+463
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-weight: bold;">
+Dependent variable
+</td>
+<td style="text-align:right;">
+score
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-weight: bold;">
+Type
+</td>
+<td style="text-align:right;">
+OLS linear regression
+</td>
+</tr>
+</tbody>
+</table>
+<table class="table table-striped table-hover table-condensed table-responsive" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<tbody>
+<tr>
+<td style="text-align:left;font-weight: bold;">
+F(2,460)
+</td>
+<td style="text-align:right;">
+9.34
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-weight: bold;">
+R²
+</td>
+<td style="text-align:right;">
+0.04
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-weight: bold;">
+Adj. R²
+</td>
+<td style="text-align:right;">
+0.03
+</td>
+</tr>
+</tbody>
+</table>
+<table class="table table-striped table-hover table-condensed table-responsive" style="width: auto !important; margin-left: auto; margin-right: auto;border-bottom: 0;">
+<thead>
+<tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:right;">
+Est.
+</th>
+<th style="text-align:right;">
+S.E.
+</th>
+<th style="text-align:right;">
+t val.
+</th>
+<th style="text-align:right;">
+p
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;font-weight: bold;">
+(Intercept)
+</td>
+<td style="text-align:right;">
+4.48
+</td>
+<td style="text-align:right;">
+0.13
+</td>
+<td style="text-align:right;">
+35.79
+</td>
+<td style="text-align:right;">
+0.00
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-weight: bold;">
+age
+</td>
+<td style="text-align:right;">
+-0.01
+</td>
+<td style="text-align:right;">
+0.00
+</td>
+<td style="text-align:right;">
+-3.28
+</td>
+<td style="text-align:right;">
+0.00
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-weight: bold;">
+gendermale
+</td>
+<td style="text-align:right;">
+0.19
+</td>
+<td style="text-align:right;">
+0.05
+</td>
+<td style="text-align:right;">
+3.63
+</td>
+<td style="text-align:right;">
+0.00
+</td>
+</tr>
+</tbody>
+<tfoot>
+<tr>
+<td style="padding: 0; " colspan="100%">
+<sup></sup> Standard errors: OLS
+</td>
+</tr>
+</tfoot>
+</table>
+<p>How do we interpret our model estimates defining the regression plane? They can be interpreted as follows:</p>
+<ul>
+<li>The <strong>intercept</strong> represents the credit card balance (<code>Balance</code>) of an individual who has $0 for both credit limit (<code>Limit</code>) and income (<code>Income</code>). However, this interpretation, though technically correct, is nonsensical in this context as there are no credit cards with $0 credit limit and no people with an income of $0 in the data set. In contexts where the intercept term does not have a meaningful interpretation, we think of it as a value that positions the fitted model with no intuitive meaning.</li>
+<li>The coefficient for credit limit (<code>Limit</code>) tells us that, <em>taking all other variables in the model into account and holding them constant</em>, there is an associated <strong>increase</strong>, on average, in credit card balance of $0.26 for every $1 increase in credit limit.</li>
+<li>Similarly, the coefficient for income (<code>Income</code>) tells us that, <em>taking all other variables in the model into account and holding them constant</em>, there is an associated <strong>decrease</strong>, on average, in credit card balance of $7.66 for every $1 increase in income.</li>
+</ul>
+<p>What do you notice that is strange about our coefficient estimates given our exploratory data analysis?</p>
+<p>Well, from our scatterplots of credit card balance against both credit limit and income, we saw that there appeared to be a positive linear relationship. Why do we then get a negative coefficient for income (-7.66)? This is due to a phenomenon known as <strong>Simpson's Paradox</strong>. This occurs when there are trends within different categories (or groups) of data, but that these trends disappear when the categories are grouped as a whole. For more details see <a href="https://moderndive.com/7-multiple-regression.html#simpsonsparadox">Section 7.3.2 of An Introduction to Statistical and Data Sciences in R</a>.</p>
+</div>
+<div id="assessing-model-fit-2" class="section level2 unnumbered hasAnchor">
+<h2>Assessing model fit<a href="regression-modelling-with-two-continuous-explanatory-variables.html#assessing-model-fit-2" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Now we need to assess our model assumptions. As a reminder, our model assumptions are:</p>
+<ol style="list-style-type: decimal">
+<li>The deterministic part of the model captures all the non-random structure in the data, i.e. the residuals have mean zero.</li>
+<li>The scale of the variability of the residuals is constant at all values of the explanatory variables.</li>
+<li>The residuals are normally distributed.</li>
+<li>The residuals are independent.</li>
+<li>The values of the explanatory variables are recorded without error.</li>
+</ol>
+<p>First, we need to obtain the fitted values and residuals from our regression model:</p>
+<div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb56-1"><a href="regression-modelling-with-two-continuous-explanatory-variables.html#cb56-1" aria-hidden="true" tabindex="-1"></a>regression.points <span class="ot">&lt;-</span> <span class="fu">get_regression_points</span>(Balance.model)</span></code></pre></div>
+<pre><code># A tibble: 400 x 6
+      ID Balance Limit Income Balance_hat residual
+   &lt;int&gt;   &lt;int&gt; &lt;int&gt;  &lt;dbl&gt;       &lt;dbl&gt;    &lt;dbl&gt;
+ 1     1     333  3606   14.9        454.   -121. 
+ 2     2     903  6645  106.         559.    344. 
+ 3     3     580  7075  105.         683.   -103. 
+ 4     4     964  9504  149.         986.    -21.7
+ 5     5     331  4897   55.9        481.   -150. 
+ 6     6    1151  8047   80.2       1127.     23.6
+ 7     7     203  3388   21.0        349.   -146. 
+ 8     8     872  7114   71.4        948.    -76.0
+ 9     9     279  3300   15.1        371.    -92.2
+10    10    1350  6819   71.1        873.    477. 
+# ... with 390 more rows
+# i Use `print(n = ...)` to see more rows</code></pre>
+<p>Recall that <code>get_regression_points</code> provides us with values of the:</p>
+<ul>
+<li>outcome variable <span class="math inline">\(y\)</span> (<code>Balance</code>);</li>
+<li>explanatory variables <span class="math inline">\(x_1\)</span> (<code>Limit</code>) and <span class="math inline">\(x_2\)</span> (<code>Income</code>);</li>
+<li>fitted values <span class="math inline">\(\widehat{y}\)</span>; and</li>
+<li>the residual error (<span class="math inline">\(y - \widehat{y}\)</span>).</li>
+</ul>
+<p>We can assess our first two model assumptions by producing scatterplots of our residuals against each of our explanatory variables. First, let's begin with the scatterplot of the residuals against credit limit:</p>
+<div class="sourceCode" id="cb58"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb58-1"><a href="regression-modelling-with-two-continuous-explanatory-variables.html#cb58-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(regression.points, <span class="fu">aes</span>(<span class="at">x =</span> Limit, <span class="at">y =</span> residual)) <span class="sc">+</span></span>
+<span id="cb58-2"><a href="regression-modelling-with-two-continuous-explanatory-variables.html#cb58-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb58-3"><a href="regression-modelling-with-two-continuous-explanatory-variables.html#cb58-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Credit limit (in $)&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Residual&quot;</span>, <span class="at">title =</span> <span class="st">&quot;Residuals vs credit limit&quot;</span>)  <span class="sc">+</span></span>
+<span id="cb58-4"><a href="regression-modelling-with-two-continuous-explanatory-variables.html#cb58-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">0</span>, <span class="at">col =</span> <span class="st">&quot;blue&quot;</span>, <span class="at">size =</span> <span class="dv">1</span>)</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:residplots1"></span>
+<img src="main_files/figure-html/residplots1-1.png" alt="Residuals vs credit limit." width="90%" />
+<p class="caption">
+Figure 16: Residuals vs credit limit.
+</p>
+</div>
+<p><br></p>
+<strong>Do the first two model assumptions appear to hold from the scatterplot of the residuals against credit limit?</strong>
+<div id="radio_KCGXGJIGAV" class="webex-radiogroup">
+<label><input type="radio" autocomplete="off" name="radio_KCGXGJIGAV" value=""></input> <span>Yes</span></label><label><input type="radio" autocomplete="off" name="radio_KCGXGJIGAV" value="answer"></input> <span>No</span></label>
+</div>
+<p><br></p>
+<p>Now, let's plot a scatterplot of the residuals against income:</p>
+<div class="sourceCode" id="cb59"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb59-1"><a href="regression-modelling-with-two-continuous-explanatory-variables.html#cb59-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(regression.points, <span class="fu">aes</span>(<span class="at">x =</span> Income, <span class="at">y =</span> residual)) <span class="sc">+</span></span>
+<span id="cb59-2"><a href="regression-modelling-with-two-continuous-explanatory-variables.html#cb59-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb59-3"><a href="regression-modelling-with-two-continuous-explanatory-variables.html#cb59-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Income (in $1000)&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Residual&quot;</span>, <span class="at">title =</span> <span class="st">&quot;Residuals vs income&quot;</span>) <span class="sc">+</span></span>
+<span id="cb59-4"><a href="regression-modelling-with-two-continuous-explanatory-variables.html#cb59-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">0</span>, <span class="at">col =</span> <span class="st">&quot;blue&quot;</span>, <span class="at">size =</span> <span class="dv">1</span>)</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:residplots2"></span>
+<img src="main_files/figure-html/residplots2-1.png" alt="Residuals vs income." width="90%" />
+<p class="caption">
+Figure 17: Residuals vs income.
+</p>
+</div>
+<p><br></p>
+<strong>Do the first two model assumptions appear to hold from the scatterplot of the residuals against income?</strong>
+<div id="radio_SPWRRIDASJ" class="webex-radiogroup">
+<label><input type="radio" autocomplete="off" name="radio_SPWRRIDASJ" value=""></input> <span>Yes</span></label><label><input type="radio" autocomplete="off" name="radio_SPWRRIDASJ" value="answer"></input> <span>No</span></label>
+</div>
+<p><br></p>
+<p>Finally, we can check if the residuals are normally distributed by producing a histogram:</p>
+<div class="sourceCode" id="cb60"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb60-1"><a href="regression-modelling-with-two-continuous-explanatory-variables.html#cb60-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(regression.points, <span class="fu">aes</span>(<span class="at">x =</span> residual)) <span class="sc">+</span></span>
+<span id="cb60-2"><a href="regression-modelling-with-two-continuous-explanatory-variables.html#cb60-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">color =</span> <span class="st">&quot;white&quot;</span>) <span class="sc">+</span></span>
+<span id="cb60-3"><a href="regression-modelling-with-two-continuous-explanatory-variables.html#cb60-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Residual&quot;</span>)</span></code></pre></div>
+<pre><code>`stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:residhist"></span>
+<img src="main_files/figure-html/residhist-1.png" alt="Figure 6: Histogram of the residuals." width="90%" />
+<p class="caption">
+Figure 18: Figure 6: Histogram of the residuals.
+</p>
+</div>
+<p><br></p>
+<strong>Do the residuals appear to be normally distributed and centred at zero?</strong>
+<div id="radio_KFDUFKVNUD" class="webex-radiogroup">
+<label><input type="radio" autocomplete="off" name="radio_KFDUFKVNUD" value=""></input> <span>Yes</span></label><label><input type="radio" autocomplete="off" name="radio_KFDUFKVNUD" value="answer"></input> <span>No</span></label>
+</div>
+<p><br>
+<br></p>
+
+</div>
+</div>
+<script>
+
+/* update total correct if #webex-total_correct exists */
+update_total_correct = function() {
+  console.log("webex: update total_correct");
+
+  if (t = document.getElementById("webex-total_correct")) {
+    var correct = document.getElementsByClassName("webex-correct").length;
+    var solvemes = document.getElementsByClassName("webex-solveme").length;
+    var radiogroups = document.getElementsByClassName("webex-radiogroup").length;
+    var selects = document.getElementsByClassName("webex-select").length;
+    
+    t.innerHTML = correct + " of " + (solvemes + radiogroups + selects) + " correct";
+  }
+}
+
+/* webex-solution button toggling function */
+b_func = function() {
+  console.log("webex: toggle hide");
+  
+  var cl = this.parentElement.classList;
+  if (cl.contains('open')) {
+    cl.remove("open");
+  } else {
+    cl.add("open");
+  }
+}
+
+/* function for checking solveme answers */
+solveme_func = function(e) {
+  console.log("webex: check solveme");
+
+  var real_answers = JSON.parse(this.dataset.answer);
+  var my_answer = this.value;
+  var cl = this.classList;
+  if (cl.contains("ignorecase")) {
+    my_answer = my_answer.toLowerCase();
+  }
+  if (cl.contains("nospaces")) {
+    my_answer = my_answer.replace(/ /g, "")
+  }
+
+  if (my_answer == "") {
+    cl.remove("webex-correct");
+    cl.remove("webex-incorrect");
+  } else if (real_answers.includes(my_answer)) {
+    cl.add("webex-correct");
+    cl.remove("webex-incorrect");
+  } else {
+    cl.add("webex-incorrect");
+    cl.remove("webex-correct");
+  }
+
+  // match numeric answers within a specified tolerance
+  if(this.dataset.tol > 0){
+    var tol = JSON.parse(this.dataset.tol);
+    var matches = real_answers.map(x => Math.abs(x - my_answer) < tol)
+    if (matches.reduce((a, b) => a + b, 0) > 0) {
+      cl.add("webex-correct");
+    } else {
+      cl.remove("webex-correct");
+    }
+  }
+
+  // added regex bit
+  if (cl.contains("regex")){
+    answer_regex = RegExp(real_answers.join("|"))
+    if (answer_regex.test(my_answer)) {
+      cl.add("webex-correct");
+    }
+  }
+
+  update_total_correct();
+}
+
+/* function for checking select answers */
+select_func = function(e) {
+  console.log("webex: check select");
+  
+  var cl = this.classList
+  
+  /* add style */
+  cl.remove("webex-incorrect");
+  cl.remove("webex-correct");
+  if (this.value == "answer") {
+    cl.add("webex-correct");
+  } else if (this.value != "blank") {
+    cl.add("webex-incorrect");
+  }
+  
+  update_total_correct();
+}
+
+/* function for checking radiogroups answers */
+radiogroups_func = function(e) {
+  console.log("webex: check radiogroups");
+
+  var checked_button = document.querySelector('input[name=' + this.id + ']:checked');
+  var cl = checked_button.parentElement.classList;
+  var labels = checked_button.parentElement.parentElement.children;
+  
+  /* get rid of styles */
+  for (i = 0; i < labels.length; i++) {
+    labels[i].classList.remove("webex-incorrect");
+    labels[i].classList.remove("webex-correct");
+  }
+  
+  /* add style */
+  if (checked_button.value == "answer") {
+    cl.add("webex-correct");
+  } else {
+    cl.add("webex-incorrect");
+  }
+  
+  update_total_correct();
+}
+
+window.onload = function() {
+  console.log("onload");
+  /* set up solution buttons */
+  var buttons = document.getElementsByTagName("button");
+
+  for (var i = 0; i < buttons.length; i++) {
+    if (buttons[i].parentElement.classList.contains('webex-solution')) {
+      buttons[i].onclick = b_func;
+    }
+  }
+
+  /* set up webex-solveme inputs */
+  var solveme = document.getElementsByClassName("webex-solveme");
+
+  for (var i = 0; i < solveme.length; i++) {
+    /* make sure input boxes don't auto-anything */
+    solveme[i].setAttribute("autocomplete","off");
+    solveme[i].setAttribute("autocorrect", "off");
+    solveme[i].setAttribute("autocapitalize", "off");
+    solveme[i].setAttribute("spellcheck", "false");
+    solveme[i].value = "";
+
+    /* adjust answer for ignorecase or nospaces */
+    var cl = solveme[i].classList;
+    var real_answer = solveme[i].dataset.answer;
+    if (cl.contains("ignorecase")) {
+      real_answer = real_answer.toLowerCase();
+    }
+    if (cl.contains("nospaces")) {
+      real_answer = real_answer.replace(/ /g, "");
+    }
+    solveme[i].dataset.answer = real_answer;
+
+    /* attach checking function */
+    solveme[i].onkeyup = solveme_func;
+    solveme[i].onchange = solveme_func;
+  }
+  
+  /* set up radiogroups */
+  var radiogroups = document.getElementsByClassName("webex-radiogroup");
+  for (var i = 0; i < radiogroups.length; i++) {
+    radiogroups[i].onchange = radiogroups_func;
+  }
+  
+  /* set up selects */
+  var selects = document.getElementsByClassName("webex-select");
+  for (var i = 0; i < selects.length; i++) {
+    selects[i].onchange = select_func;
+  }
+
+  update_total_correct();
+}
+
+</script>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="multiple-linear-regression.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="regression-modelling-with-one-continuous-and-one-categorical-explanatory-variable.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": null,
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["main.pdf", "main.epub"],
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "subsection",
+"scroll_highlight": true
+},
+"info": true
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

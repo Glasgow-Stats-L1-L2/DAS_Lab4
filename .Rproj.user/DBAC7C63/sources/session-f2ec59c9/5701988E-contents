@@ -1,0 +1,96 @@
+--- 
+title: "Data Analysis: Regression Modelling"
+site: bookdown::bookdown_site
+output: bookdown::gitbook
+documentclass: book
+biblio-style: apalike
+link-citations: yes
+---
+
+```{r setupSLR, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, comment = NA)
+library(webexercises)
+library(ggplot2)
+library(dplyr)
+library(moderndive)
+library(gapminder)
+library(skimr)
+library(mvtnorm)
+library(gridExtra)
+library(tidyr)
+evals.scores <- evals %>%
+ select(score, bty_avg)
+model <- lm(score ~ bty_avg, data = evals.scores)
+regression.points <- get_regression_points(model)
+gapminder2007 <- gapminder %>%
+ filter(year == 2007) %>% 
+ select(country, continent, lifeExp)
+lifeExp.model <- lm(lifeExp ~ continent, data = gapminder2007)
+lifeExp.continent <- gapminder2007 %>%
+ group_by(continent) %>%
+ summarize(median = median(lifeExp), mean = mean(lifeExp))
+lifeExp.by.continent <- gapminder2007 %>%
+ group_by(continent) %>%
+ summarize(median = median(lifeExp), mean = mean(lifeExp))
+mean.africa <- lifeExp.by.continent %>%
+ filter(continent == "Africa") %>%
+ pull(mean)
+regression_points <- get_regression_points(lifeExp.model)
+```
+
+```{r setupMLR, include=FALSE}
+library(ggplot2)
+library(dplyr)
+library(moderndive)
+library(ISLR)
+library(skimr)
+library(plotly)
+library(tidyr)
+library(datasets)
+library(jtools)
+Cred <- Credit %>%
+  select(Balance, Limit, Income)
+Balance.model <- lm(Balance ~ Limit + Income, data = Cred)
+eval.score <- evals %>%
+  select(score, age, gender)
+par.model <- lm(score ~ age + gender, data = eval.score)
+coeff  <- par.model %>% 
+          coef() %>%
+          as.numeric()
+  
+slopes <- eval.score %>%
+  group_by(gender) %>%
+  summarise(min = min(age), max = max(age)) %>%
+  mutate(intercept = coeff[1]) %>%
+  mutate(intercept = ifelse(gender == "male", intercept + coeff[3], intercept)) %>%
+  gather(point, age, -c(gender, intercept)) %>%
+  mutate(y_hat = intercept + age * coeff[2])
+int.model <- lm(score ~ age * gender, data = eval.score)
+regression.points <- get_regression_points(int.model)
+knitr::opts_chunk$set(echo = FALSE, comment = NA)
+```
+
+# Introduction {-}
+
+**Now that you are familiar with RMarkdown, you are encouraged to collate your work in this lab in a RMarkdown file.  Complete the lab from this week and subsequent weeks in a `.Rmd` file.**
+
+Now that we have covered visualising and manipulating data in R, we can now proceed to modelling data. The key idea behind modelling data is to infer the relationship between an:
+
+  * **outcome (or response) variable** $y$ and
+  * an **explanatory (or predictor) variable** $x$, which can also be referred to as an **independent variable** or **covariate**.
+
+Modelling can be used for two purposes:
+
+1. **Explanation**: For describing the relationship between an outcome variable $y$ and an explanatory variable $x$, and determining the potential significance of such relationships using quantifiable measures.
+
+2. **Prediction**: for predicting the outcome variable $y$ given information from one or more explanatory variables.
+
+There are many different modelling techniques. However, we will begin with one of the easier to understand and commonly-used approaches, **linear regression**. In particular, we will start by looking at **simple linear regression**, where we only have one explanatory variable.
+
+**Note**: Additional information and examples can be found in [Chapter 5](https://moderndive.com/5-regression.html) of [Statistical Inference via Data Science](https://moderndive.com/index.html).
+
+<br>
+<br>
+
+
+

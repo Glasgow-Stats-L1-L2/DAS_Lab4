@@ -1,0 +1,356 @@
+# Regression modelling with one continuous and one categorical explanatory variable {-}
+
+Let's expand upon Further Tasks 2, 3 and 4 from before by revisiting the instructor evaluation data set `evals`. You were tasked with examining the relationship between teaching score (`score`) and age (`age`). Now, let's also introduce the additional (binary) categorical explanatory variable gender (`gender`). That is, we will be examining:
+
+  * the teaching score (`score`) as our outcome variable $y$;
+  * age (`age`) as our continuous explanatory variable $x_1$; and
+  * gender (`gender`) as our categorical explanatory variable $x_2$.
+  
+## Exploratory data analysis {-}
+
+**Task**: Start by subsetting the `evals` data set so that we only have the variables we are interested in, that is, `score`, `age` and `gender`. Note, it is best to give your new data set a different name than evals as to not overwrite the original `evals` data set.
+
+```{r Task7-solution, webex.hide="Solution", echo=TRUE, eval=TRUE}
+eval.score <- evals %>% 
+  select(score, age, gender)
+```
+
+<br>
+
+Your new data set should look like the one below.
+
+```{r subevals2, echo = FALSE, eval = TRUE, warning = FALSE}
+eval.score
+```
+
+**Note**: You can also view your data set using the `glimpse` function, or by opening a spreadsheet view in RStudio using the `View` function.
+
+We can use the `skim` function to obtain some summary statistics from our data:
+
+```{r evalssum, echo = TRUE, eval = TRUE, warning = FALSE}
+eval.score %>%
+  skim()
+```
+
+<br>
+
+```{r MCQ42}
+opts_Q42 <- sample(c("195",
+                     answer = "268",
+                     "463"))
+```
+
+**How many males are in the data set?**
+`r longmcq(opts_Q42)`
+
+<br>
+
+```{r MCQ43}
+opts_Q43 <- sample(c("48.37",
+                     answer = "48.00",
+                     "57.00"))
+```
+
+**What is the median age in the data set?**
+`r longmcq(opts_Q43)`
+
+<br>
+
+```{r MCQ44}
+opts_Q44 <- sample(c("4.3",
+                     answer = "3.8",
+                     "2.3"))
+```
+
+**What is the maximum teaching score of the bottom 25% of professors?**
+`r longmcq(opts_Q44)`
+
+<br>
+
+Now, let's compute the correlation coefficient between our outcome variable `score` and our continuous explanatory variable `age`:
+
+```{r co2, echo = TRUE, eval = TRUE, warning = FALSE}
+eval.score %>% 
+  get_correlation(formula = score ~ age)
+```
+
+**Note**: The correlation coefficient only exists between continuous variables, which is why we do not include our categorical variable `gender`.
+
+<br>
+
+```{r MCQ45}
+opts_Q45 <- sample(c("Very weak positive",
+                     answer = "Very weak negative",
+                     "Weak negative",
+                     "Moderate positive"))
+```
+
+**What is the verbal interpretation of the correlation coefficient?**
+`r longmcq(opts_Q45)`
+
+<br>
+
+We can now visualise our data by producing a scatterplot, where seeing as we have the categorical variable `gender`, we shall plot the points using different colours for each gender:
+
+```{r evalsscat, echo = TRUE, eval = TRUE, warning = FALSE, message=FALSE, out.width = '90%', fig.align = "center", fig.cap = "\\label{fig:evalsscat} Figure 7: Instructor evaluation scores by age and gender. The points have been jittered."}
+ggplot(eval.score, aes(x = age, y = score, color = gender)) +
+  geom_jitter() +
+  labs(x = "Age", y = "Teaching Score", color = "Gender") +
+  geom_smooth(method = "lm", se = FALSE)
+```
+
+**Note**: The above code has jittered the points, however, this is not necessary and `geom_point` would suffice. To plot separate points by gender we simply add the `color` argument to the `aes` function and pass to it `gender`.
+
+From the scatterplot we can see that:
+
+  * There are very few women over the age of 60 in our data set.
+  * From the plotted regression lines we can see that the lines have different slopes for men and women. That is, the associated effect of increasing age appears to be more severe for women than it does for men, i.e.\ the teaching score of women drops faster with age.
+  
+  
+## Multiple regression: parallel slopes model {-}
+
+Here, we shall begin by fitting what is referred to as a parallel regression lines model. This model implies that the slope of relationship between teaching score (`score`) and age (`age`) is the same for both males and females, with only the intercept of the regression lines changing. Hence, our parallel regression lines model is given as:
+
+\begin{align}
+y_{i} &= \alpha + \beta_1 x_{1i} + \beta_2  x_{2i} + \epsilon_i \nonumber \\
+&= \alpha + \beta_{\mbox{age}} \cdot \mbox{age}_i + \beta_{\mbox{male}} \cdot \mathbb{I}_{\mbox{male}}(i) + \epsilon_i, \nonumber
+\end{align}
+
+where
+
+  * $\alpha$ is the intercept of the regression line for females;
+  * $\beta_{\mbox{age}}$ is the slope of the regression line for both males and females;
+  * $\mbox{age}_i$ is the age of the $i$th observation
+  * $\beta_{\mbox{male}}$ is the additional term added to $\alpha$ to get the intercept of the regression line for males; and
+  * $\mathbb{I}_{\mbox{male}}(i)$ is an indicator function such that
+  
+    $$\mathbb{I}_{\mbox{male}}(i)=\left\{
+                \begin{array}{ll}
+                  1 ~~~ \mbox{if the} ~ i \mbox{th observation is male},\\
+                  0 ~~~ \mbox{Otherwise}.\\
+                \end{array}
+              \right.$$
+
+We can fit the parallel regression lines model as follows:
+
+```{r parmod, echo = TRUE, eval = TRUE, warning = FALSE}
+par.model <- lm(score ~ age + gender, data = eval.score)
+get_regression_table(par.model)
+```
+
+Hence, the regression line for females is given by:
+
+$$\widehat{\mbox{score}} = 4.48 - 0.009 \cdot \mbox{age},$$
+
+while the regression line for males is given by:
+
+$$\widehat{\mbox{score}} = 4.48 - 0.009 \cdot \mbox{age} + 0.191 = 4.671 - 0.009 \cdot \mbox{age}.$$
+
+<br>
+
+```{r MCQ46}
+opts_Q46 <- sample(c("4.246",
+                     answer = "4.147",
+                     "4.338",
+                     "4.451"))
+```
+
+**From the parallel regression lines model, what would be the teaching score of a female instructor aged 37?**
+`r longmcq(opts_Q46)`
+
+<br>
+
+```{r MCQ47}
+opts_Q47 <- sample(c("4.012",
+                     answer = "4.203",
+                     "4.302",
+                     "4.159"))
+```
+
+**From the parallel regression lines model, what would be the teaching score of a male instructor aged 52?**
+`r longmcq(opts_Q47)`
+
+<br>
+
+Now, let's superimpose our parallel regression lines onto the scatterplot of teaching score against age:
+
+```{r parscat, echo = TRUE, eval = TRUE, warning = FALSE, out.width = '90%', fig.align = "center", fig.cap = "\\label{fig:parscat} Figure 8: Instructor evaluation scores by age and gender with parallel regression lines superimposed."}
+coeff  <- par.model %>% 
+          coef() %>%
+          as.numeric()
+
+slopes <- eval.score %>%
+  group_by(gender) %>%
+  summarise(min = min(age), max = max(age)) %>%
+  mutate(intercept = coeff[1]) %>%
+  mutate(intercept = ifelse(gender == "male", intercept + coeff[3], intercept)) %>%
+  gather(point, age, -c(gender, intercept)) %>% #gathers columns into rows
+                                                #See Data Wrangling Cheat Sheet
+  mutate(y_hat = intercept + age * coeff[2])
+
+ggplot(eval.score, aes(x = age, y = score, col = gender)) +
+  geom_jitter() +
+  labs(x = "Age", y = "Teaching Score", color = "Gender") +
+  geom_line(data = slopes, aes(y = y_hat), size = 1)
+```
+
+**Note**: go through the code used to create `coeff` and `slopes` and make sure you understand it.
+
+From the parallel regression lines model both males and females have the same slope, that is, the associated effect of age on teaching score is the same for both men and women. Hence, for every one year increase in age, there is an associated decrease in teaching score of 0.009. However, male instructors have a higher intercept term, that is, there is a vertical bump in the regression line for males in teaching scores. This is linked to the average difference in teaching scores that males obtain relative to females.
+
+What is different between our previous scatterplot of teaching score against age (Figure 7) and the one we just created with our parallel lines superimposed (Figure 8)?
+
+In the original plot we have what is referred to as an interaction effect between age and gender. Hence, gender interacts in different ways for both males and females by age, and as such we should have different intercepts **and** slopes.
+
+## Multiple regression: interaction model {-}
+ 
+There is an *interaction effect* if the associated effect of one variable depends on the value of another variable. For example, the effect of age here will depend on whether the instructor is male or female, that is, the effect of age on teaching scores will differ by gender. The interaction model can be written as:
+
+\begin{align}
+y_{i} &= \alpha + \beta_1 x_{1i} + \beta_2 x_{2i} + \beta_3 x_{1i} \cdot x_{2i} + \epsilon_i \nonumber \\
+&= \alpha + \beta_{\mbox{age}} \cdot \mbox{age}_i + \beta_{\mbox{male}} \cdot \mathbb{I}_{\mbox{male}}(i) + \beta_{\mbox{age, male}} \cdot \mbox{age}_i \cdot \mathbb{I}_{\mbox{male}}(i) + \epsilon_i, \nonumber
+\end{align}
+
+where $\beta_{\mbox{age, male}} \cdot \mbox{age}_i \cdot \mathbb{I}_{\mbox{male}}(i)$ corresponds to the interaction term.
+
+In order to fit an interaction term within our regression model we replace the `+` sign with the `*` sign as follows:
+
+```{r intmod, echo = TRUE, eval = TRUE, warning = FALSE}
+int.model <- lm(score ~ age * gender, data = eval.score)
+get_regression_table(int.model)
+```
+
+Hence, the regression line for females is given by:
+
+$$\widehat{\mbox{score}} = 4.88 - 0.018 \cdot \mbox{age},$$
+while the regression line for males is given by:
+
+$$\widehat{\mbox{score}} = 4.88 - 0.018 \cdot \mbox{age} - 0.446 + 0.014 \cdot \mbox{age} = 4.434 - 0.004 \cdot \mbox{age}.$$
+
+Notice how the interaction model allows for different slopes for females and males (-0.018 and -0.004, respectively).  These fitted lines correspond to the fitted lines we first saw in Figure 7, repeated in Figure 7b but without the `jitter`ing:
+ 
+```{r intscat, echo = TRUE, eval = TRUE, warning = FALSE, message = FALSE, out.width = '90%', fig.align = "center", fig.cap = "\\label{fig:evalsscat2} Figure 7b: Instructor evaluation scores by age and gender with interaction model fit added (same as Figure 7 but without jittering)."}
+ggplot(eval.score, aes(x = age, y = score, color = gender)) +
+  geom_point() +
+  labs(x = "Age", y = "Teaching Score", color = "Gender") +
+  geom_smooth(method = "lm", se = FALSE)
+```
+
+<br>
+
+```{r MCQ48}
+opts_Q48 <- sample(c("4.286",
+                     answer = "4.214",
+                     "4.227",
+                     "4.311"))
+```
+
+**From the interaction model, what would be the teaching score of a female instructor aged 37?**
+`r longmcq(opts_Q48)`
+
+<br>
+
+```{r MCQ49}
+opts_Q49 <- sample(c("3.944",
+                     answer = "4.226",
+                     "4.298",
+                     "3.877"))
+```
+
+**From the interaction model, what would be the teaching score of a male instructor aged 52?**
+`r longmcq(opts_Q49)`
+
+<br>
+
+How do they compare with the teaching score values from the parallel regression lines model?
+
+Here, we can see that, although the intercept for male instructors may be lower, the associated average **decrease** in teaching score with every year increase in age (0.004) is not as severe as it is for female instructors (0.018).
+
+## Assessing model fit {-}
+
+Now we have to assess the fit of the model by looking at plots of the residuals. We shall do this for the interaction model. First, we need to obtain the fitted values and residuals from the interaction model as follows:
+
+```{r intresids, echo = c(1), eval = TRUE, warning = FALSE}
+regression.points <- get_regression_points(int.model)
+regression.points
+```
+
+Let's start by looking at a scatterplot of the residuals against the explanatory variable by gender:
+
+```{r intresid1, echo = TRUE, eval = TRUE, warning = FALSE, out.width = '90%', fig.align = "center", fig.cap = "Figure 9: Residuals vs the explanatory variable age by gender."}
+ggplot(regression.points, aes(x = age, y = residual)) +
+  geom_point() +
+  labs(x = "age", y = "Residual") +
+  geom_hline(yintercept = 0, col = "blue", size = 1) +
+  facet_wrap(~ gender)
+```
+
+<br>
+
+```{r MCQ50}
+opts_Q50 <- c(answer = "Yes",
+              "No")
+```
+
+**Do the assumptions of the residuals having mean zero and constant variability across all levels of the explanatory variable hold?**
+`r longmcq(opts_Q50)`
+
+`r hide("Answer")`
+There is an even scatter of points above and below the zero line indicating the residuals have mean zero. The scattering of the points is also constant across all values of the explanatory variable with no systematic pattern observed in the residuals.
+`r unhide()`
+
+<br>
+
+Now, we can plot the residuals against the fitted values:
+
+```{r intresid2, echo = TRUE, eval = TRUE, warning = FALSE, out.width = '90%', fig.align = "center", fig.cap = "Figure 10: Residuals vs the fitted values."}
+ggplot(regression.points, aes(x = score_hat, y = residual)) +
+  geom_point() +
+  labs(x = "Fitted values", y = "Residual") +
+  geom_hline(yintercept = 0, col = "blue", size = 1) +
+  facet_wrap(~ gender)
+```
+
+<br>
+
+```{r MCQ51}
+opts_Q51 <- c(answer = "Yes",
+              "No")
+```
+
+**Do the assumptions of the residuals having mean zero and constant variability across all levels of the fitted values hold?**
+`r longmcq(opts_Q51)`
+
+`r hide("Answer")`
+There is an even scatter of points above and below the zero line indicating the residuals have mean zero. The scattering of the points is also constant across all values of the fitted values with no systematic pattern observed in the residuals. We can also see that the range of fitted values for male instructors is narrower than that of female instructors.
+`r unhide()`
+
+<br>
+
+Finally, let's plot histograms of the residuals to assess whether they are normally distributed with mean zero:
+
+```{r intresid3, echo = TRUE, eval = TRUE, warning = FALSE, out.width = '90%', fig.align = "center", fig.cap = "Figure 11: Histograms of the residuals by gender."}
+ggplot(regression.points, aes(x = residual)) +
+  geom_histogram(binwidth = 0.25, color = "white") +
+  labs(x = "Residual") +
+  facet_wrap(~gender)
+```
+
+<br>
+
+```{r MCQ52}
+opts_Q52 <- c("Yes",
+              answer = "No")
+```
+
+**Do the residuals appear to be normally distributed with mean zero?**
+`r longmcq(opts_Q52)`
+
+`r hide("Answer")`
+Our subjective impression is that the residuals do not appear to be bell-shaped, but rather left-skewed (and more so for males). More formal analysis of the normality of the residuals should be pursued.
+`r unhide()`
+
+<br>
+<br>
+
+

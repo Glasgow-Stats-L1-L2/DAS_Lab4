@@ -1,0 +1,148 @@
+# Further Tasks: Simple Linear Regression {-}
+
+```{r MCQ23}
+opts_Q23 <- c("$x$",
+              answer = "$y$")
+```
+
+**How do we commonly represent an outcome variable?**
+`r longmcq(opts_Q23)`
+
+<br>
+
+```{r MCQ24}
+opts_Q24 <- sample(c("Covariate",
+                     answer = "Response",
+                     "Predictor",
+                     "Independent"))
+```
+
+**What is another name for the outcome varable?**
+`r longmcq(opts_Q24)`
+
+<br>
+
+```{r MCQ25}
+opts_Q25 <- sample(c("$y$",
+                     answer = "$\\beta$",
+                     "$\\alpha$",
+                     "$\\epsilon$"))
+```
+
+**For the linear regression model $y_i = \alpha + \beta x_i + \epsilon_i, ~ \epsilon_i \sim N(0, \sigma^2)$, what term refers to the slope of the regression line?**
+`r longmcq(opts_Q25)`
+
+<br>
+
+```{r MCQ26}
+opts_Q26 <- sample(c("Very strong positive correlation",
+                     answer = "Strong positive correlation",
+                     "Strong negative correlation",
+                     "Moderate negative correlation",
+                     "Weak positive correlation"))
+```
+
+**What would be the verbal interpretation of a correlation coefficient of 0.73?**
+`r longmcq(opts_Q26)`
+
+<br>
+
+```{r MCQ27}
+opts_Q27 <- sample(c("Fitted value",
+                     answer = "Residual error",
+                     "Observed value"))
+```
+
+**What does $y - \widehat{y}$ refer to?**
+`r longmcq(opts_Q27)`
+
+<br>
+
+```{r MCQ28}
+opts_Q28 <- sample(c("Numerical",
+                     answer = "Categorical"))
+```
+
+**A `factor` in R is what type of variable?**
+`r longmcq(opts_Q28)`
+
+<br>
+
+**Task** Examine the relationship between teaching score and age in the `evals` data set. What is the value of the correlation coefficient? How would you interpret this verbally? Finally, produce a scatterplot of teaching score and age. 
+
+`r hide("Hint")`
+Start by looking at a subset of the `evals` data set referring to `score` and `age`. You can then use the `get_correlation` function to obtain the correlation coefficient. The scatterplot can be produced using `ggplot` and `geom_point`. Note, remember to give your scatterplot appropriate labels.
+`r unhide()`
+
+<br>
+
+**Task** Perform a formal analysis of the relationship between teaching score and age by fitting a simple linear regression model. Superimpose your best-fitting line onto your scatterplot from Task 2.
+
+`r hide("Hint")`
+Use the `lm` function to fit the regression model. Check the `geom_smooth` function to add the best-fitting line to your scatterplot.
+`r unhide()`
+
+<br>
+
+```{r MCQ29}
+opts_Q29 <- sample(c("4.6",
+                     answer = "4.3",
+                     "4.1",
+                     "5.3"))
+```
+
+**What is the fitted value of the 22nd instructor?**
+`r longmcq(opts_Q29)`
+
+<br>
+
+```{r MCQ30}
+opts_Q30 <- sample(c("4.27",
+                     answer = "-0.07",
+                     "4.2",
+                     "0.1",
+                     "-0.15"))
+```
+
+**What is the residual error for the 34th instructor?**
+`r longmcq(opts_Q30)`
+
+<br>
+
+**Task** Assess the model assumptions from Task 3 by plotting the residuals against the explanatory variable and fitted values, respectively. Also, plot a histogram of the residuals to assess whether they are normally distributed.
+
+`r hide("Hint")`
+You will want to store the fitted values and residuals from your model using the `get_regression_points` function. The plots examining the assumptions can then be plotted using `ggplot`, `geom_point` and `geom_histogram`.
+`r unhide()`
+
+<br>
+
+```{r MCQ31}
+opts_Q31 <- c(answer = "Yes",
+              "No")
+```
+
+**Do the model assumptions hold?**
+`r longmcq(opts_Q31)`
+
+<br>
+
+**Task** If we were interested in exploring the relationship between teaching score and age for male and female professors separately we could produce a scatterplot of teaching score and age with different symbols (and an appropriate legend) for males and females.  Create this plot and superimpose on it the linear regression models fitted to the male and female data separately.  Note you do not need to examine the models formally, we'll look at that in a future lab.
+
+`r hide("Hint")`
+The `aes` function in `ggplot2` can take arguments such as`shape=...`, `color=...` and `linetype=...` to define the appearance of plotted objects.
+`r unhide()`
+
+<br>
+
+**Task** Perform the same analysis we did on life expectancy from the `gapminder` data set in 2007. However, subset the data for the year 1997. Are there any differences in the results across this 10 year period?
+
+`r hide("Hint")`
+Start by subsetting the `gapminder` data set for the year 1997 using the `filter` function.
+`r unhide()`
+
+<br>
+<br>
+
+
+
