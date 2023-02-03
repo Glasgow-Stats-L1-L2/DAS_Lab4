@@ -256,8 +256,8 @@ $ cls_level    &lt;fct&gt; upper, upper, upper, upper, upper, upper, upper, uppe
 </div>
 <p><br></p>
 <strong>How many observations are in the <code>evals</code> data set?</strong>
-<div id="radio_HYBOOLTJGO" class="webex-radiogroup">
-<label><input type="radio" autocomplete="off" name="radio_HYBOOLTJGO" value=""></input> <span>512</span></label><label><input type="radio" autocomplete="off" name="radio_HYBOOLTJGO" value=""></input> <span>13</span></label><label><input type="radio" autocomplete="off" name="radio_HYBOOLTJGO" value="answer"></input> <span>463</span></label><label><input type="radio" autocomplete="off" name="radio_HYBOOLTJGO" value=""></input> <span>18</span></label>
+<div id="radio_JIGEBBYWYU" class="webex-radiogroup">
+<label><input type="radio" autocomplete="off" name="radio_JIGEBBYWYU" value=""></input> <span>512</span></label><label><input type="radio" autocomplete="off" name="radio_JIGEBBYWYU" value=""></input> <span>18</span></label><label><input type="radio" autocomplete="off" name="radio_JIGEBBYWYU" value=""></input> <span>13</span></label><label><input type="radio" autocomplete="off" name="radio_JIGEBBYWYU" value="answer"></input> <span>463</span></label>
 </div>
 <p><br></p>
 <p>At the moment we are only really interested in the instructors teaching (<code>score</code>) and beauty (<code>bty_avg</code>) scores, and so we can look at a subset of the data as follows:</p>
@@ -274,16 +274,16 @@ Solution
 <pre><code># A tibble: 10 x 14
       ID prof_ID score   age bty_avg gender ethnicity    language  rank  pic_o~1
    &lt;int&gt;   &lt;int&gt; &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt; &lt;fct&gt;  &lt;fct&gt;        &lt;fct&gt;     &lt;fct&gt; &lt;fct&gt;  
- 1   453      92   4.4    60    4.33 female not minority non-engl~ tenu~ formal 
- 2   213      38   4.8    60    3.67 male   not minority english   tenu~ not fo~
- 3   421      85   5      58    7.83 male   not minority english   teac~ not fo~
- 4   117      20   3.3    57    4.33 female not minority english   teac~ not fo~
- 5    94      18   4      48    4.33 male   not minority english   teac~ not fo~
- 6   372      74   4.4    38    3.33 male   not minority english   tenu~ not fo~
- 7   430      87   4.5    33    5.83 male   not minority english   tenu~ not fo~
- 8   448      92   3.9    60    4.33 female not minority non-engl~ tenu~ formal 
- 9   408      82   4.2    57    2.83 male   not minority english   tenu~ not fo~
-10   207      23   4.7    62    3    male   not minority english   tenu~ formal 
+ 1   120      20   3.4    57    4.33 female not minority english   teac~ not fo~
+ 2   335      68   2.4    60    1.67 male   not minority english   tenu~ not fo~
+ 3   299      58   4.7    43    3.33 female not minority english   tenu~ not fo~
+ 4   152      27   3.6    52    4.83 male   minority     non-engl~ tenu~ formal 
+ 5   420      85   5      58    7.83 male   not minority english   teac~ not fo~
+ 6   318      64   4      52    6.5  female not minority english   tenu~ not fo~
+ 7   117      20   3.3    57    4.33 female not minority english   teac~ not fo~
+ 8   255      49   3.5    52    3.17 male   not minority english   tenu~ not fo~
+ 9   421      85   5      58    7.83 male   not minority english   teac~ not fo~
+10   424      85   5      58    7.83 male   not minority english   teac~ not fo~
 # ... with 4 more variables: pic_color &lt;fct&gt;, cls_did_eval &lt;int&gt;,
 #   cls_students &lt;int&gt;, cls_level &lt;fct&gt;, and abbreviated variable name
 #   1: pic_outfit
@@ -393,13 +393,13 @@ Solution
 <p>These summary statistics give us an idea of how both variables are distributed. For example, the mean teaching score (<code>score</code>) is 4.17 out 5, while the mean beauty score (<code>bty_avg</code>) is 4.42 out of 10. Also, the middle 50% of the data for <code>score</code> lies between 3.8 and 4.6, while the middle 50% of <code>bty_avg</code> lies between 3.17 and 5.5.</p>
 <p><br></p>
 <strong>What is the minimum value of teaching score (<code>score</code>)?</strong>
-<div id="radio_ORIZLCAOXC" class="webex-radiogroup">
-<label><input type="radio" autocomplete="off" name="radio_ORIZLCAOXC" value="answer"></input> <span>2.3</span></label><label><input type="radio" autocomplete="off" name="radio_ORIZLCAOXC" value=""></input> <span>2.5</span></label><label><input type="radio" autocomplete="off" name="radio_ORIZLCAOXC" value=""></input> <span>1.7</span></label><label><input type="radio" autocomplete="off" name="radio_ORIZLCAOXC" value=""></input> <span>1.6</span></label>
+<div id="radio_ORSJFWKAVY" class="webex-radiogroup">
+<label><input type="radio" autocomplete="off" name="radio_ORSJFWKAVY" value="answer"></input> <span>2.3</span></label><label><input type="radio" autocomplete="off" name="radio_ORSJFWKAVY" value=""></input> <span>1.7</span></label><label><input type="radio" autocomplete="off" name="radio_ORSJFWKAVY" value=""></input> <span>1.6</span></label><label><input type="radio" autocomplete="off" name="radio_ORSJFWKAVY" value=""></input> <span>2.5</span></label>
 </div>
 <p><br></p>
 <strong>What is the maximum value of beauty score (<code>bty_avg</code>)?</strong>
-<div id="radio_CAZGEBPGTF" class="webex-radiogroup">
-<label><input type="radio" autocomplete="off" name="radio_CAZGEBPGTF" value=""></input> <span>8.4</span></label><label><input type="radio" autocomplete="off" name="radio_CAZGEBPGTF" value=""></input> <span>5.0</span></label><label><input type="radio" autocomplete="off" name="radio_CAZGEBPGTF" value="answer"></input> <span>8.2</span></label><label><input type="radio" autocomplete="off" name="radio_CAZGEBPGTF" value=""></input> <span>5.2</span></label>
+<div id="radio_FWMKEMOOXU" class="webex-radiogroup">
+<label><input type="radio" autocomplete="off" name="radio_FWMKEMOOXU" value=""></input> <span>8.4</span></label><label><input type="radio" autocomplete="off" name="radio_FWMKEMOOXU" value="answer"></input> <span>8.2</span></label><label><input type="radio" autocomplete="off" name="radio_FWMKEMOOXU" value=""></input> <span>5.2</span></label><label><input type="radio" autocomplete="off" name="radio_FWMKEMOOXU" value=""></input> <span>5.0</span></label>
 </div>
 <p><br></p>
 </div>
@@ -420,13 +420,13 @@ Figure 1: Differing levels of correlation between variables.
 </div>
 <p><br></p>
 <strong>Which plots (a)-(e) display positive correlation?</strong>
-<div id="radio_RGMMUZKLBJ" class="webex-radiogroup">
-<label><input type="radio" autocomplete="off" name="radio_RGMMUZKLBJ" value=""></input> <span>(c) and (d)</span></label><label><input type="radio" autocomplete="off" name="radio_RGMMUZKLBJ" value=""></input> <span>(c) and (e)</span></label><label><input type="radio" autocomplete="off" name="radio_RGMMUZKLBJ" value=""></input> <span>(a) and (b)</span></label><label><input type="radio" autocomplete="off" name="radio_RGMMUZKLBJ" value="answer"></input> <span>(d) and (e)</span></label>
+<div id="radio_ULVQXJMKLW" class="webex-radiogroup">
+<label><input type="radio" autocomplete="off" name="radio_ULVQXJMKLW" value="answer"></input> <span>(d) and (e)</span></label><label><input type="radio" autocomplete="off" name="radio_ULVQXJMKLW" value=""></input> <span>(c) and (e)</span></label><label><input type="radio" autocomplete="off" name="radio_ULVQXJMKLW" value=""></input> <span>(c) and (d)</span></label><label><input type="radio" autocomplete="off" name="radio_ULVQXJMKLW" value=""></input> <span>(a) and (b)</span></label>
 </div>
 <p><br></p>
 <strong>Which plots (a)-(e) display negative correlation?</strong>
-<div id="radio_VKLNQTUDRT" class="webex-radiogroup">
-<label><input type="radio" autocomplete="off" name="radio_VKLNQTUDRT" value=""></input> <span>(a) and (c)</span></label><label><input type="radio" autocomplete="off" name="radio_VKLNQTUDRT" value="answer"></input> <span>(a) and (b)</span></label><label><input type="radio" autocomplete="off" name="radio_VKLNQTUDRT" value=""></input> <span>(b) and (c)</span></label><label><input type="radio" autocomplete="off" name="radio_VKLNQTUDRT" value=""></input> <span>(d) and (e)</span></label>
+<div id="radio_YQBRKVSHLW" class="webex-radiogroup">
+<label><input type="radio" autocomplete="off" name="radio_YQBRKVSHLW" value=""></input> <span>(a) and (c)</span></label><label><input type="radio" autocomplete="off" name="radio_YQBRKVSHLW" value=""></input> <span>(d) and (e)</span></label><label><input type="radio" autocomplete="off" name="radio_YQBRKVSHLW" value=""></input> <span>(b) and (c)</span></label><label><input type="radio" autocomplete="off" name="radio_YQBRKVSHLW" value="answer"></input> <span>(a) and (b)</span></label>
 </div>
 <p><br></p>
 <p>The correlation coefficient can be computed in R using the <code>get_correlation</code> function from the <code>moderndive</code> package. The function requires two numerical variables separated by <code>~</code> (or 'tilde'), much like the formula syntax, such that the outcome variable <code>score</code> is put on the left-hand-side of the formula, and the explanatory variable <code>bty_avg</code> is placed on the right-hand-side of the formula:</p>
