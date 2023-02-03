@@ -51,12 +51,12 @@
 <link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
 <script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
 <script src="libs/htmlwidgets-1.5.4/htmlwidgets.js"></script>
-<script src="libs/plotly-binding-4.10.0/plotly.js"></script>
+<script src="libs/plotly-binding-4.10.1/plotly.js"></script>
 <script src="libs/typedarray-0.1/typedarray.min.js"></script>
 <link href="libs/crosstalk-1.2.0/css/crosstalk.min.css" rel="stylesheet" />
 <script src="libs/crosstalk-1.2.0/js/crosstalk.min.js"></script>
-<link href="libs/plotly-htmlwidgets-css-2.5.1/plotly-htmlwidgets.css" rel="stylesheet" />
-<script src="libs/plotly-main-2.5.1/plotly-latest.min.js"></script>
+<link href="libs/plotly-htmlwidgets-css-2.11.1/plotly-htmlwidgets.css" rel="stylesheet" />
+<script src="libs/plotly-main-2.11.1/plotly-latest.min.js"></script>
 
 
 <style type="text/css">
@@ -203,7 +203,9 @@ where</p>
 </ul>
 <p>The random components, <span class="math inline">\(\epsilon_i\)</span>, are normally distributed with mean zero and constant variance <span class="math inline">\(\sigma^2\)</span>, such that we are essentially adding random white noise to the deterministic part of the model (<span class="math inline">\(\alpha + \beta x_i\)</span>). Thus, the full probability model for <span class="math inline">\(y_i\)</span> given <span class="math inline">\(x_i\)</span> (<span class="math inline">\(y_i | x_i\)</span>) can be written as</p>
 <p><span class="math display">\[y_i | x_i \sim N(\alpha + \beta x_i, \sigma^2).\]</span></p>
-<p>Hence, the mean comes from the deterministic part of the model, while the variance comes from the random part. We shall now look into fitting a simple linear regression model to some data.</p>
+<p>Hence, the mean comes from the deterministic part of the model, while the variance comes from the random part.</p>
+<hr />
+<p>We will focus on the topic of choosing between different models in a future lab but for now we recall that one way to decide which terms should be included in the model is to consider the p-value associated with each estimated parameter (i.e. in this example <span class="math inline">\(\hat\alpha\)</span> and <span class="math inline">\(\hat\beta\)</span>). The convention is to choose a significance level of 5% and then decide to include terms in the model if the p-value of the associated parameter estimate is less than 0.05 (i.e. reject the null hypothesis that the parameter is zero). This approach is used with both SLR and MLR models.</p>
 <p><br>
 <br></p>
 
